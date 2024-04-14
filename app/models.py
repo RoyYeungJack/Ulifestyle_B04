@@ -90,3 +90,12 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
+
+# Yeung Yau Ki code
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+
+    def __repr__(self) -> str:
+        return f'<Category {self.name}>'

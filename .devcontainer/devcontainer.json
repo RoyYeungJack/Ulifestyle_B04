@@ -51,7 +51,6 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "samuelcolvin.jinjahtml",
-        "monosans.djlint",
         "ms-azuretools.vscode-docker"
       ]
     }

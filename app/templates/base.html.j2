@@ -37,7 +37,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
                         <li>
-                            <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
+                            <a href="{{ url_for('index') }}">{{ _('index') }}</a>
                         </li>
                     {% else %}
                         <li>

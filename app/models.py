@@ -99,3 +99,29 @@ class Category(db.Model):
 
     def __repr__(self) -> str:
         return f'<Category {self.name}>'
+
+# Lau Mei Yan code
+# class Article(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     title = db.Column(db.String(100))
+#     content = db.Column(db.Text, nullable=False)
+#     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
+#     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+
+# #City
+
+# #Tag
+# -id
+# -name
+
+# class Tag(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50), unique=True)
+
+
+# #Article-Category Relationship
+# article_tag = db.Table('article_tag',
+#     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
+#     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)

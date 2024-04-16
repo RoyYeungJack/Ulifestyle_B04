@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Category, User, Post
+from app.models import Category, User, Post, Location
 from app.email import send_password_reset_email
 
 
@@ -196,3 +196,9 @@ def categories():
     categories = Category.query.all()
     return render_template('categories.html.j2', title=_('Categories'), categories=categories)
     
+
+@app.route('/home')
+def home():
+    locations = Location.query.all()
+    print(locations)  # for debugging
+    return render_template('login.html.2', locations=locations)

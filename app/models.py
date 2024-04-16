@@ -82,11 +82,15 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-class Post(db.Model):
+class Post(db.Model): #Lau Mei Yan
+
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
+    title = db.Column(db.String(100))
+    body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
+    # tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
@@ -100,25 +104,11 @@ class Category(db.Model):
     def __repr__(self) -> str:
         return f'<Category {self.name}>'
 
-# Lau Mei Yan code
-# class Article(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     title = db.Column(db.String(100))
-#     content = db.Column(db.Text, nullable=False)
-#     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
-#     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
-
-# #City
-
-# #Tag
-# -id
-# -name
-
 # class Tag(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     name = db.Column(db.String(50), unique=True)
+
+# #City
 
 
 # #Article-Category Relationship

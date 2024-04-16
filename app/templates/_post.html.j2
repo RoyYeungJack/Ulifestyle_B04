@@ -9,8 +9,11 @@
             {% set user_link %}
             <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
         {% endset %}
-        {{ _('%(username)s said %(when)s',
+        {{ _('%(username)s posted %(when)s',
         username=user_link, when=moment(post.timestamp).fromNow()) }}
+        <br/>
+        {# Lau Mei Yan #}
+        {{ post.title}}
         <br/>
         {{ post.body }}
     </td>

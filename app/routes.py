@@ -64,7 +64,7 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-        return redirect(next_page)
+        redirect(next_page)
     return render_template('login.html.j2', title=_('Sign In'), form=form)
 
 
@@ -195,7 +195,8 @@ def categories():
 def newpost():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user)
+        #Lau Mei Yan
+        post = Post(title=form.title.data, body=form.post.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash(_('Your post is now live!'))

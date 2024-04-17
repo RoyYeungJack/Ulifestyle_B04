@@ -82,7 +82,12 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-class Post(db.Model): #Lau Mei Yan
+#Lau Mei Yan
+# class Tag(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50), unique=True)
+
+class Post(db.Model): 
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -94,6 +99,17 @@ class Post(db.Model): #Lau Mei Yan
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
+    
+# #Post-Tag Relationship
+# post_tag = db.Table('post',
+#     db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
+#     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)
+
+# #Post-City Relationship
+# post_city = db.Table('post_city',
+#     db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
+#     db.Column('city_id', db.Integer, db.ForeignKey('city.id'), primary_key=True)
+
 
 # Yeung Yau Ki code
 
@@ -103,15 +119,3 @@ class Category(db.Model):
 
     def __repr__(self) -> str:
         return f'<Category {self.name}>'
-
-# class Tag(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(50), unique=True)
-
-# #City
-
-
-# #Article-Category Relationship
-# article_tag = db.Table('article_tag',
-#     db.Column('article_id', db.Integer, db.ForeignKey('article.id'), primary_key=True),
-#     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)

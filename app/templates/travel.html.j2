@@ -15,7 +15,7 @@
                 <div id="cities-{{ country.id }}" class="cities" style="display: none;">
                     <h2>{{ country.name }}</h2>
                     {% for city in country.cities %}
-                        <a href="{{ url_for('city', city_name=city.name) }}">{{ city.name }}</a>{% if not loop.last %}, {% endif %}
+                        <a href="{{ url_for('city', city_name=city.name) }}">{{ city.name }}</a>{% if not loop.last %}  {% endif %}
                     {% endfor %}
                 </div>
             </div>

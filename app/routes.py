@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post
+from app.models import User, Post, UserPoints
 from app.email import send_password_reset_email
 
 
@@ -71,6 +71,15 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
+    # if user.last_login.date() < datetime.utcnow().date():
+    #     user_points = UserPoints.query.filter_by(user_id=user.id).first()
+    #     if user_points:
+    #         user_points.points += 100
+    #     else:
+    #         user_points = UserPoints(user_id=user.id, points=100)
+    #     db.session.add(user_points)
+    #     user.last_login = datetime.utcnow()
+    #     db.session.commit()
     return render_template('login.html.j2', title=_('Sign In'), form=form)
 
 
@@ -189,3 +198,17 @@ def unfollow(username):
     db.session.commit()
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
+
+@app.route('/member')
+@login_required
+def member():
+    user_points = UserPoints.query.filter_by(user_id=current_user.id).first()
+    if user_points is not None:
+        return render_template('member.html.j2', points=user_points.points)
+    else:
+        new_user_points = UserPoints(user_id=current_user.id, points=0)
+        db.session.add(new_user_points)
+        db.session.commit()
+        return render_template('member.html.j2', points=new_user_points.points)
+
+

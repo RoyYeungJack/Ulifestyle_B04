@@ -90,3 +90,34 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
+    
+class UserPoints(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    points = db.Column(db.Integer, default=100)
+    
+    user = db.relationship('User')
+
+    def add_points(user_id, points_to_add):
+        user_points = UserPoints.query.filter_by(user_id=user_id).first()
+        if user_points:
+            user_points.points += points_to_add
+            db.session.commit()
+    def subtract_points(user_id, points_to_subtract):
+        user_points = UserPoints.query.filter_by(user_id=user_id).first()
+        if user_points and user_points.points >= points_to_subtract:
+            user_points.points -= points_to_subtract
+            db.session.commit()
+
+
+
+
+# class hk_life(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+
+
+# class u_travel(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+
+
+    

@@ -199,7 +199,7 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
-@app.route('/member')
+@app.route('/member',methods=['GET', 'POST'])
 @login_required
 def member():
     user_points = UserPoints.query.filter_by(user_id=current_user.id).first()

@@ -101,11 +101,18 @@ class Category(db.Model):
         return f'<Category {self.name}>'
     
 
-class Location(db.Model):
+class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
-    parent_id = db.Column(db.Integer, db.ForeignKey('location.id'))
-    parent = db.relationship('Location', backref=db.backref('children', lazy='dynamic'), remote_side=[id])
+    cities = db.relationship('City', backref='country', lazy=True)
 
-    def __repr__(self) -> str:
-        return f'<Location {self.name}>'
+    def __repr__(self):
+        return f'<Country {self.name}>'
+
+class City(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    country_id = db.Column(db.Integer, db.ForeignKey('country.id'))
+
+    def __repr__(self):
+        return f'<City {self.name}>'

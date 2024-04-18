@@ -1,0 +1,40 @@
+{% extends "base.html.j2" %}
+
+{% block head %}
+    {{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/travel.css') }}">
+
+{% endblock %}
+
+{% block content %}
+    <h1>Countries</h1>
+    <div class="country-container">
+        {% for country in countries %}
+            <div class="country">
+                <button onclick="showCities({{ country.id }})">{{ country.name }}</button>
+                <div id="cities-{{ country.id }}" class="cities" style="display: none;">
+                    <h2>{{ country.name }}</h2>
+                    {% for city in country.cities %}
+                        <a href="{{ url_for('city', city_name=city.name) }}">{{ city.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        var currentOpenCities = null;
+        function showCities(countryId) {
+            if (currentOpenCities) {
+                currentOpenCities.style.display = "none";
+            }
+            var citiesDiv = document.getElementById('cities-' + countryId);
+            if (citiesDiv.style.display === "none") {
+                citiesDiv.style.display = "block";
+                currentOpenCities = citiesDiv;
+            } else {
+                citiesDiv.style.display = "none";
+                currentOpenCities = null;
+            }
+        }
+    </script>
+{% endblock %}

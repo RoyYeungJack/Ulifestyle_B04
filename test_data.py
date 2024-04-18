@@ -1,5 +1,5 @@
 from app import db, app
-from app.models import User, Post, Category, Location
+from app.models import User, Post, Category, Country, City
 
 
 app_context = app.app_context()
@@ -26,46 +26,16 @@ c1 = Category(name='HK')
 c2 = Category(name='Travel')
 db.session.add(c1)
 db.session.add(c2)
-
-japan = Location(name='japan')
-shenzhen = Location(name='shenzhen')
-macau = Location(name='macau')
-taiwan = Location(name='taiwan')
-thailand = Location(name='thailand')
-korea = Location(name='korea')
-
-tokyo = Location(name='tokyo', parent=japan)
-osaka = Location(name='osaka', parent=japan)
-kyoto = Location(name='kyoto', parent=japan)
-kobe = Location(name='kobe ', parent=japan)
-nara = Location(name='nara', parent=japan)
-fukuoka = Location(name='fukuoka', parent=japan)
-okinawa = Location(name='okinawa', parent=japan)
-sapporo = Location(name='sapporo ', parent=japan)
-nagoya = Location(name='nagoya ', parent=japan)
-kumamoto = Location(name='kumamoto ', parent=japan)
-hakone = Location(name='hakone ', parent=japan)
-izu = Location(name='izu ', parent=japan)
-tottori = Location(name='tottori ', parent=japan)
-karuizawa = Location(name='karuizawa ', parent=japan)
+#db.create_all()
 
 
-db.session.add(japan)
-db.session.add(taiwan)
-db.session.add(macau)
-db.session.add(tokyo)
-db.session.add(osaka)
-db.session.add(kyoto)
-db.session.add(nara)
-db.session.add(fukuoka)
-db.session.add(okinawa)
-db.session.add(sapporo)
-db.session.add(nagoya)
-db.session.add(kumamoto)
-db.session.add(hakone)
-db.session.add(izu)
-db.session.add(tottori)
-db.session.add(karuizawa)
+taiwan = Country(name='Taiwan')
+japan = Country(name='Japan')
 
+taipei = City(name='Taipei', country=taiwan)
+taichung = City(name='Taichung', country=taiwan)
+tokyo = City(name='Tokyo', country=japan)
+kyoto = City(name='Kyoto', country=japan)
 
+db.session.add_all([taiwan, japan, tokyo, kyoto, taipei, taichung])
 db.session.commit()

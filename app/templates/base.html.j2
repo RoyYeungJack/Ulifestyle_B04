@@ -33,6 +33,9 @@
                     <li>
                         <a href="{{ url_for('categories') }}">{{ _('HK') }}</a>
                     </li>
+                    <li>
+                        <a href="{{ url_for('travel') }}">Travel</a>
+                    </li>
                 </ul>
 
 
@@ -53,23 +56,8 @@
             </div>
         </div>
     </nav>
-<table class="table">
-<thead>
-    <tr>
-        <th scope="col">Location</th>
-        <th scope="col">Parent</th>
-    </tr>
-</thead>
-<tbody>
-    {% for location in locations %}
-    <tr>
-        <th scope="row">{{ loop.index }}</th>
-        <td>{{ location.name }}</td>
-        <td>{{ location.parent.name if location.parent else 'N/A' }}</td>
-    </tr>
-    {% endfor %}
-</tbody>
-</table>
+
+
 {% endblock %}
 {% block content %}
     <div class="container">

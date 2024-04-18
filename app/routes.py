@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Category, User, Post, Location
+from app.models import Category, User, Post, Country,City
 from app.email import send_password_reset_email
 
 
@@ -58,6 +58,7 @@ def explore():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #locations = Location.query.all()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -70,9 +71,10 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-        return redirect(next_page)
+        return redirect(next_page) 
+    
     return render_template('login.html.j2', title=_('Sign In'), form=form)
-
+    #,locations=locations
 
 @app.route('/logout')
 def logout():
@@ -196,9 +198,11 @@ def categories():
     categories = Category.query.all()
     return render_template('categories.html.j2', title=_('Categories'), categories=categories)
     
+@app.route('/travel')
+def travel():
+    countries = Country.query.all()
+    return render_template('travel.html.j2', countries=countries)
 
-@app.route('/home')
-def home():
-    locations = Location.query.all()
-    print(locations)  # for debugging
-    return render_template('login.html.2', locations=locations)
+@app.route('/city/<city_name>')
+def city(city_name):
+    pass

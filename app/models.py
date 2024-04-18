@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from hashlib import md5
 from app import app, db, login
 import jwt
+from sqlalchemy import Text
 
 from flask_login import UserMixin
 
@@ -116,3 +117,20 @@ class City(db.Model):
 
     def __repr__(self):
         return f'<City {self.name}>'
+    
+class CityIntroduction(db.Model):
+    city_name = db.Column(db.String(50), db.ForeignKey('city.name'), primary_key=True)
+    introduction = db.Column(Text)
+    useful_links = db.Column(Text)
+    emergency_help = db.Column(Text)
+    transportation_info = db.Column(Text)
+    climate = db.Column(Text)
+    festivals = db.Column(Text)
+    tags = db.Column(Text)
+    related_content = db.Column(Text)
+    image_path = db.Column(db.String(200))
+
+    city = db.relationship('City', backref=db.backref('introduction', uselist=False))
+
+    def __repr__(self):
+        return f'<CityIntroduction {self.city_name}>'

@@ -1,0 +1,24 @@
+{% extends "base.html.j2" %}
+
+{% block content %}
+    <h1>{{ city.name }}</h1>
+    <button onclick="showContent('introduction')">Introduction</button>
+    <button onclick="showContent('useful_links')">Useful Links</button>
+    <button onclick="showContent('emergency_help')">Emergency Help</button>
+    <button onclick="showContent('transportation_info')">Transportation Info</button>
+
+    <div id="introduction" style="display: none;">{{ intro.introduction }}</div>
+    <div id="useful_links" style="display: none;">{{ intro.useful_links }}</div>
+    <div id="emergency_help" style="display: none;">{{ intro.emergency_help }}</div>
+    <div id="transportation_info" style="display: none;">{{ intro.transportation_info }}</div>
+
+    <script>
+        function showContent(id) {
+            var contents = ['introduction', 'useful_links', 'emergency_help', 'transportation_info'];
+            contents.forEach(function(content) {
+                document.getElementById(content).style.display = 'none';
+            });
+            document.getElementById(id).style.display = 'block';
+        }
+    </script>
+{% endblock %}

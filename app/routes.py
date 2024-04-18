@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Category, User, Post, Country,City
+from app.models import Category, User, Post, Country, City, CityIntroduction
 from app.email import send_password_reset_email
 
 
@@ -205,4 +205,6 @@ def travel():
 
 @app.route('/city/<city_name>')
 def city(city_name):
-    pass
+    city = City.query.filter_by(name=city_name).first_or_404()
+    intro = CityIntroduction.query.filter_by(city_name=city_name).first()
+    return render_template('city.html.j2', city=city, intro=intro)

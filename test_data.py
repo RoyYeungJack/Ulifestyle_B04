@@ -1,5 +1,5 @@
 from app import db, app
-from app.models import User, Post , UserPoints
+from app.models import User, Post , UserPoints ,MemberItem
 
 
 app_context = app.app_context()
@@ -24,8 +24,13 @@ p2 = Post(body='my first post!', author=u2)
 db.session.add(p1)
 db.session.add(p2)
 
-d_point = UserPoints(points=100)
-db.session.add(d_point)
+
+f1 = MemberItem(name='unbelievable curry fish ball', category='food', points=6969)
+t1 = MemberItem(name='unbelievable japan travel', category='travel', points=6666)
+db.session.add(f1)
+db.session.add(t1)
+# d_point = UserPoints(points=100)
+# db.session.add(d_point)
 # logintest = product(name='LT1', price=69)
 # logintest2 = product(name='hikocat', price=5)
 # db.session.add(logintest)

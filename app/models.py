@@ -109,6 +109,11 @@ class UserPoints(db.Model):
             user_points.points -= points_to_subtract
             db.session.commit()
 
+class MemberItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    category = db.Column(db.String(64))  # 'food' or 'travel'
+    points = db.Column(db.Integer)
 
 
 

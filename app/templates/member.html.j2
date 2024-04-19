@@ -25,6 +25,34 @@
         .points-display button {
             margin-top: 10px;
         }
+        .category-container {
+            margin-bottom: 2rem;
+        }
+        .item-card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .item-card h5 {
+            color: #333;
+        }
+        .item-card p {
+            color: #666;
+        }
+        .item-card button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .item-card button:hover {
+            background-color: #4cae4c;
+        }
     </style>
 </head>
 <body>
@@ -34,17 +62,51 @@
     
     <form action="{{ url_for('add_points') }}" method="post">
     <input type="hidden" name="user_id" value="{{ current_user.id }}">
-    <input type="text" name="points" pattern="\d*" maxlength="3" style="width: 50px;">
+    <input type="text" name="points" pattern="\d*" maxlength="4" style="width: 50px;">
     <button type="submit">+</button>
     </form>
 
     <form action="{{ url_for('subtract_points') }}" method="post">
     <input type="hidden" name="user_id" value="{{ current_user.id }}">
-    <input type="text" name="points" pattern="\d*" maxlength="3" style="width: 50px;">
+    <input type="text" name="points" pattern="\d*" maxlength="4" style="width: 50px;">
     <button type="submit">-</button>
     </form>
 
     </div>
+
+    <div class="container">
+        <div class="category-container">
+            <h2>Food</h2>
+            {% for item in food_items %}
+                <div class="item-card">
+                    <h4>{{ item.name }}</h4>
+                    <p>{{ item.points }} points</p>
+                    <form action="{{ url_for('purchase_item') }}" method="post">
+                        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <button type="submit">Purchase</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="category-container">
+            <h2>Travel</h2>
+            {% for item in travel_items %}
+                <div class="item-card">
+                    <h4>{{ item.name }}</h4>
+                    <p>{{ item.points }} points</p>
+                    <form action="{{ url_for('purchase_item') }}" method="post">
+                        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <button type="submit">Purchase</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </body>
+
 
 {% endblock %}

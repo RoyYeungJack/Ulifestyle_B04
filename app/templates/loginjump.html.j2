@@ -1,11 +1,48 @@
 {% extends "base.html.j2" %}
 {% import 'bootstrap/wtf.html' as wtf %}
+
 {% block app_content %}
-
-{% if not current_user.is_authenticated %}
-    <p>You need to log in to view this page.</p>
-    <a href="{{ url_for('login') }}" class="btn btn-primary">Log in</a>
-{% endif %}
-
-
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .login-message {
+            text-align: center;
+            margin-top: 20%;
+        }
+        .login-message p {
+            font-size: 1.5em;
+        }
+        .login-message a {
+            color: white;
+            background-color: #007bff;
+            border-color: #007bff;
+            display: inline-block;
+            margin: 0.375rem 1rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-weight: 400;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    {% if not current_user.is_authenticated %}
+        <div class="login-message">
+            <p>You need to log in to view this page.</p>
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Log in</a>
+        </div>
+    {% endif %}
+</body>
 {% endblock %}

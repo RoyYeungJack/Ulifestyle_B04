@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, UserPoints
+from app.models import User, Post, UserPoints , MemberItem
 from app.email import send_password_reset_email
 
 
@@ -203,13 +203,15 @@ def unfollow(username):
 @login_required
 def member():
     user_points = UserPoints.query.filter_by(user_id=current_user.id).first()
+    food_items = MemberItem.query.filter_by(category='food').all()
+    travel_items = MemberItem.query.filter_by(category='travel').all()
     if user_points is not None:
-        return render_template('member.html.j2', points=user_points.points)
+        return render_template('member.html.j2', points=user_points.points, food_items=food_items, travel_items=travel_items)
     else:
         new_user_points = UserPoints(user_id=current_user.id, points=0)
         db.session.add(new_user_points)
         db.session.commit()
-        return render_template('member.html.j2', points=new_user_points.points)
+        return render_template('member.html.j2', points=new_user_points.points, food_items=food_items, travel_items=travel_items)
     
 @app.route('/add_points', methods=['POST'])
 @login_required
@@ -231,6 +233,20 @@ def subtract_points():
 def loginjump():
     return render_template('loginjump.html.j2')
 
+@app.route('/purchase_item', methods=['POST'])
+@login_required
+def purchase_item():
+    user_id = request.form.get('user_id')
+    item_id = request.form.get('item_id')
+    item = MemberItem.query.get(item_id)
+    user_points = UserPoints.query.filter_by(user_id=user_id).first()
+    if user_points.points >= item.points:
+        user_points.points -= item.points
+        db.session.commit()
+        flash('You have successfully purchased the item!', 'success')
+    else:
+        flash('You do not have enough points to purchase this item.', 'error')
+    return redirect(url_for('member'))
 
 
 

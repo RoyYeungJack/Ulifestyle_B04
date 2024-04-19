@@ -1,8 +1,17 @@
 from app import db, app
 from app.models import Category, Blogger, Blogpost, User
 
+# set FLASK_APP=microblog.py
+# export FLASK_APP=microblog.py
+# flask shell
+# users = User.query.all()
+# op.drop_constraint(constraint_name="FK_blogger_id", table_name="Blogger")
+# op.drop_constraint(constraint_name="FK_blogger_id", table_name="Blogger")
+
+
 app_context = app.app_context()
 app_context.push()
+
 db.drop_all()
 db.create_all()
 

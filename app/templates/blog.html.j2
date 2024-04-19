@@ -1,1 +1,19 @@
-<h1>HI</h1>
+{% extends "base.html.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+<!-- Your existing code -->
+
+ 
+<ul>
+    {% for shit1 in blog_posts %}
+
+    <h2>{{ shit1.name }}</h2>
+    <p>by{{ shit1.blogger_id }}</p>
+
+    {% endfor %}
+</ul>
+
+
+
+<!-- Your existing code -->
+{% endblock %}

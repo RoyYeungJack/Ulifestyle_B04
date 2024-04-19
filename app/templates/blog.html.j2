@@ -1,19 +1,24 @@
 {% extends "base.html.j2" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
-<!-- Your existing code -->
+
 
  
 <ul>
-    {% for shit1 in blog_posts %}
+    {% for post in blog_posts %}
 
-    <h2>{{ shit1.name }}</h2>
-    <p>by{{ shit1.blogger_id }}</p>
+    <h2>{{ post.title }} ID:{{ post.id }} </h2>
+    <p>by {{ post.blogger_id }} {{ post.blogger.name }}</p>
+    <p>{{ post.description }}</p>
 
     {% endfor %}
 </ul>
+    {% if form %}
+        {{ wtf.quick_form(form) }}
+        <br/>
+    {% endif %}
+
+<h2> <a href="{{ url_for('Add_BlogPost') }}">ADD</a> </h2>
 
 
-
-<!-- Your existing code -->
 {% endblock %}

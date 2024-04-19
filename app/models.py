@@ -104,9 +104,10 @@ class Category(db.Model):
 class Blogger(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
-    blogposts = db.relationship('Blogpost', backref='blogger', lazy=True,)
+    blogposts = db.relationship('BlogPost', backref='blogger', lazy=True,)
 
-class Blogpost(db.Model):
+class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
+    title = db.Column(db.String(50))
+    description = db.Column(db.String(600), nullable=False)
     blogger_id = db.Column(db.Integer, db.ForeignKey('blogger.id'))

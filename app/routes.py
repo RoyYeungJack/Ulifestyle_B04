@@ -4,10 +4,12 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import app, db
+from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Category, User, Post, Blogpost, Blogger
-from app.email import send_password_reset_email
+from app.models import Category, User, Post, BlogPost, Blogger
+from app.formblog import AddBlogPostForm
+
 
 
 @app.before_request
@@ -190,6 +192,7 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
+#---------------------------------------------------------------------
 
 @app.route('/categories', methods=['GET'])
 def categories():
@@ -197,7 +200,22 @@ def categories():
     return render_template('categories.html.j2', title=_('Categories'), categories=categories)
     
 @app.route('/blog')
-def blogpage():
-    blog_posts = Blogpost.query.all()
-    return render_template('blog.html.j2',blog_posts=blog_posts)
+def blog():
+    blog_posts = BlogPost.query.all()
+    blog_author = Blogger.query.all()
+    return render_template('blog.html.j2',blog_posts=blog_posts,blog_author=blog_author)
+
+@app.route('/blog/post', methods=['GET', 'POST'])
+def Add_BlogPost():
+    form = AddBlogPostForm()
+    if form.validate_on_submit():
+            lastblogpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
+            blogpost = BlogPost(id=lastblogpost.id + 1,
+                                title=form.title.data, description=form.desc.data,
+                                blogger_id=form.author_id.data)
+            db.session.add(blogpost)
+            db.session.commit()
+            flash(_('Finish'))
+            return redirect(url_for('Add_BlogPost'))
+    return render_template('blog.html.j2', form=form)
 

@@ -7,7 +7,7 @@ from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Category, User, Post, BlogPost, Blogger
+from app.models import Category, User, Post, BlogPost, Blogger, BlogType
 from app.formblog import AddBlogPostForm
 
 
@@ -202,8 +202,7 @@ def categories():
 @app.route('/blog')
 def blog():
     blog_posts = BlogPost.query.all()
-    blog_author = Blogger.query.all()
-    return render_template('blog.html.j2',blog_posts=blog_posts,blog_author=blog_author)
+    return render_template('blog.html.j2',blog_posts=blog_posts)
 
 @app.route('/blog/post', methods=['GET', 'POST'])
 def Add_BlogPost():

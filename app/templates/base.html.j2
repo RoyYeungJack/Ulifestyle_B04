@@ -62,7 +62,9 @@
         {% endwith %}
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
-                                <h1></h1><a href="{{ url_for('blog') }}" class="btn btn-primary">Travel Blog</a></h1>
+
+<h1></h1><a href="{{ url_for('blog') }}">Travel Blog</a></h1>
+
     </div>
 {% endblock %}
 {% block scripts %}

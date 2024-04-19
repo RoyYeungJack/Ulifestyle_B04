@@ -2,16 +2,17 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
 
-
  
 <ul>
     {% for post in blog_posts %}
 
-    <h2>{{ post.title }} ID:{{ post.id }} </h2>
+    <h2>{{ post.title }} ID:{{ post.id }} {{ post.blogtype.type }} </h2>
     <p>by {{ post.blogger_id }} {{ post.blogger.name }}</p>
     <p>{{ post.description }}</p>
 
     {% endfor %}
+    
+
 </ul>
     {% if form %}
         {{ wtf.quick_form(form) }}

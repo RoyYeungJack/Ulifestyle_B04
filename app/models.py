@@ -106,8 +106,16 @@ class Blogger(db.Model):
     name = db.Column(db.String(50), unique=True)
     blogposts = db.relationship('BlogPost', backref='blogger', lazy=True,)
 
+
+class BlogType(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(10), unique=True)
+    blogtype_posts = db.relationship('BlogPost', backref='blogtype', lazy=True)
+
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
     description = db.Column(db.String(600), nullable=False)
     blogger_id = db.Column(db.Integer, db.ForeignKey('blogger.id'))
+    blogtype_id = db.Column(db.Integer, db.ForeignKey('blog_type.id'))
+    

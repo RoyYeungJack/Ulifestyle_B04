@@ -196,3 +196,7 @@ def categories():
     categories = Category.query.all()
     return render_template('categories.html.j2', title=_('Categories'), categories=categories)
     
+@app.route('/blog')
+def blogpage():
+    return render_template('blog.html.j2')
+

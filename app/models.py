@@ -99,3 +99,14 @@ class Category(db.Model):
 
     def __repr__(self) -> str:
         return f'<Category {self.name}>'
+    
+
+class Blogger(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    blogposts = db.relationship('Blogpost', backref='blogger', lazy=True)
+
+class Blogpost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    blogger_id = db.Column(db.Integer, db.ForeignKey('blogger.id'))

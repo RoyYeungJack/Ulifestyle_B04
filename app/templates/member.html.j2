@@ -4,10 +4,47 @@
 
 <head>
     <title>Member Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .points-display {
+            position: absolute;
+            right: 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .points-display p {
+            margin: 0;
+        }
+        .points-display button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome, {{ current_user.username }}!</h1>
-    <p>You have {{ points }} points.</p>
+    <div class="points-display">
+    <p>Points:{{ points }}</p>
+    
+    <form action="{{ url_for('add_points') }}" method="post">
+    <input type="hidden" name="user_id" value="{{ current_user.id }}">
+    <input type="text" name="points" pattern="\d*" maxlength="3" style="width: 50px;">
+    <button type="submit">+</button>
+    </form>
+
+    <form action="{{ url_for('subtract_points') }}" method="post">
+    <input type="hidden" name="user_id" value="{{ current_user.id }}">
+    <input type="text" name="points" pattern="\d*" maxlength="3" style="width: 50px;">
+    <button type="submit">-</button>
+    </form>
+
+    </div>
 </body>
 
 {% endblock %}

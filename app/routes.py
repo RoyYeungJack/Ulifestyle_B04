@@ -210,5 +210,27 @@ def member():
         db.session.add(new_user_points)
         db.session.commit()
         return render_template('member.html.j2', points=new_user_points.points)
+    
+@app.route('/add_points', methods=['POST'])
+@login_required
+def add_points():
+    user_id = request.form.get('user_id')
+    points = int(request.form.get('points'))
+    UserPoints.add_points(user_id, points)
+    return redirect(url_for('member'))
+
+@app.route('/subtract_points', methods=['POST'])
+@login_required
+def subtract_points():
+    user_id = request.form.get('user_id')
+    points = int(request.form.get('points'))
+    UserPoints.subtract_points(user_id, points)
+    return redirect(url_for('member'))
+
+@app.route('/loginjump', methods=['GET', 'POST'])
+def loginjump():
+    return render_template('loginjump.html.j2')
+
+
 
 

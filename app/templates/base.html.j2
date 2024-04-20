@@ -31,7 +31,7 @@
                         <a href="{{ url_for('explore') }}">{{ _('Explore') }}</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('categories') }}">{{ _('HK') }}</a>
+                        <a href="{{ url_for('Blog') }}">{{ ('BLOG') }}</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -62,10 +62,9 @@
         {% endwith %}
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
-
-<h1></h1><a href="{{ url_for('blog') }}">Travel Blog</a></h1>
-
     </div>
+
+    
 {% endblock %}
 {% block scripts %}
     {{ super() }}

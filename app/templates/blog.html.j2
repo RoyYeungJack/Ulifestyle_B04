@@ -1,25 +1,30 @@
-{% extends "base.html.j2" %}
-{% import 'bootstrap/wtf.html' as wtf %}
-{% block app_content %}
-
- 
-<ul>
-    {% for post in blog_posts %}
-
-    <h2>{{ post.title }} ID:{{ post.id }} {{ post.blogtype.type }} </h2>
-    <p>by {{ post.blogger_id }} {{ post.blogger.name }}</p>
-    <p>{{ post.description }}</p>
-
-    {% endfor %}
-    
-
-</ul>
-    {% if form %}
-        {{ wtf.quick_form(form) }}
-        <br/>
-    {% endif %}
-
-<h2> <a href="{{ url_for('Add_BlogPost') }}">ADD</a> </h2>
-
-
-{% endblock %}
+#{% extends "base.html.j2" %}
+#{% import 'bootstrap/wtf.html' as wtf %}
+#{% block app_content %}
+#
+#
+#<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+#<ul class="nav navbar-nav">
+#    {% for type in blog_type %}
+#        <li><a href="{{ blog }}">{{ type.type }}</a></li>
+#    {% endfor %}
+#</ul></div>
+#
+#
+#<div><ul>
+#    {% for post in blogposts %}
+#        <h2>{{ post.title }} ID:{{ post.id }} {{ post.blogtype.type }} </h2>
+#        <p>by {{ post.user_id }} </p>
+#        <p>{{ post.description }}</p>
+#    {% endfor %}
+#</ul></div>
+#
+#{% if form %}
+#    {{ wtf.quick_form(form) }}
+#    <br/>
+#{% endif %}
+#
+#<h2><a href="{{ url_for('Add_BlogPost') }}">ADD</a></h2>
+#
+#
+#{% endblock %}

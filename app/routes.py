@@ -7,7 +7,7 @@ from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Category, User, Post, BlogPost, Blogger, BlogType
+from app.models import User, Post, BlogPost, BlogType
 from app.formblog import AddBlogPostForm
 
 
@@ -194,15 +194,13 @@ def unfollow(username):
 
 #---------------------------------------------------------------------
 
-@app.route('/categories', methods=['GET'])
-def categories():
-    categories = Category.query.all()
-    return render_template('categories.html.j2', title=_('Categories'), categories=categories)
-    
-@app.route('/blog')
-def blog():
-    blog_posts = BlogPost.query.all()
-    return render_template('blog.html.j2',blog_posts=blog_posts)
+@app.route('/blog', methods=['GET', 'POST'])
+def Blog():
+    blogposts = BlogPost.query.all()
+    blogtypes = BlogType.query.all()
+    return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes)
+
+
 
 @app.route('/blog/post', methods=['GET', 'POST'])
 def Add_BlogPost():
@@ -211,7 +209,7 @@ def Add_BlogPost():
             lastblogpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
             blogpost = BlogPost(id=lastblogpost.id + 1,
                                 title=form.title.data, description=form.desc.data,
-                                blogger_id=form.type.data)
+                                blogtype_id=form.type.data)
             db.session.add(blogpost)
             db.session.commit()
             flash(_('Finish'))

@@ -1,5 +1,5 @@
 from app import db, app
-from app.models import User, Post, Category
+from app.models import User, Post
 
 
 app_context = app.app_context()

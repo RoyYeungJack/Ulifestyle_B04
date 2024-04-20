@@ -29,6 +29,8 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+   # blog_posts = db.relationship('BlogPost', backref='user')
+    #blog_types = db.relationship('BlogType', backref='user')
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -93,30 +95,16 @@ class Post(db.Model):
 
 # Yeung Yau Ki code
 
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
-
-    def __repr__(self) -> str:
-        return f'<Category {self.name}>'
-    
-
-class Blogger(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
-    blogposts = db.relationship('BlogPost', backref='blogger', lazy=True,)
-
-
 class BlogType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(10), unique=True)
-    blogtype_posts = db.relationship('BlogPost', backref='blogtype', lazy=True)
+    blog_posts = db.relationship('BlogPost', backref='blogtype', lazy=True)
 
 
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
     description = db.Column(db.String(600), nullable=False)
-    blogger_id = db.Column(db.Integer, db.ForeignKey('blogger.id'))
+   # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     blogtype_id = db.Column(db.Integer, db.ForeignKey('blog_type.id'))
     

@@ -1,0 +1,20 @@
+{% extends "base.html.j2" %}
+
+{% block head %}
+    {{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/edit_city.css') }}">
+
+{% endblock %}
+
+{% block content %}
+    <h1>Edit {{ city.name }}</h1>
+    <form action="{{ url_for('update_city', city_name=city.name) }}" method="post">
+        <label for="introduction">Introduction:</label><br>
+        <textarea name="introduction" class="edit-box">{{ intro.introduction }}</textarea><br>
+        <label for="useful_links">Useful Links:</label><br>
+        <textarea name="useful_links" class="edit-box">{{ intro.useful_links }}</textarea><br>
+
+
+        <input type="submit" value="Update">
+    </form>
+{% endblock %}

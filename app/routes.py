@@ -205,6 +205,58 @@ def travel():
 
 @app.route('/city/<city_name>')
 def city(city_name):
+    # Find the city in the database
     city = City.query.filter_by(name=city_name).first_or_404()
+    # Find the intro in the database
     intro = CityIntroduction.query.filter_by(city_name=city_name).first()
     return render_template('city.html.j2', city=city, intro=intro)
+
+@app.route('/update_introduction/<city_name>', methods=['POST'])
+def update_introduction(city_name):
+    # Get the new introduction from the form data
+    new_introduction = request.form.get('introduction')
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # If the city is found
+    if city:
+        # Update the city's introduction
+        city.introduction.introduction = new_introduction
+
+        # Commit the changes to the database
+        db.session.commit()
+
+    # Redirect the user back to the city page
+    return redirect(url_for('city', city_name=city_name))
+
+@app.route('/edit_city/<city_name>')
+def edit_city(city_name):
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # Render the edit page
+    return render_template('edit_city.html.j2', city=city, intro=city.introduction)
+
+@app.route('/update_city/<city_name>', methods=['POST'])
+def update_city(city_name):
+    # Get the new data from the form
+    new_introduction = request.form.get('introduction')
+    new_useful_links = request.form.get('useful_links')
+    # Get more data as needed
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # If the city is found
+    if city:
+        # Update the city's introduction
+        city.introduction.introduction = new_introduction
+        city.introduction.useful_links = new_useful_links
+        # Update more fields as needed
+
+        # Commit the changes to the database
+        db.session.commit()
+
+    # Redirect the user back to the city page
+    return redirect(url_for('city', city_name=city_name))

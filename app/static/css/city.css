@@ -1,0 +1,6 @@
+.content-box {
+    width: 50%; /* Set the width to 50% of the page */
+    border: 1px solid black; /* Add a border */
+    padding: 10px; /* Add some padding */
+    margin: auto; /* Center the box */
+}

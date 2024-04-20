@@ -2,8 +2,7 @@
 
 {% block head %}
     {{ super() }}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/edit_city.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/edit_city.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -15,9 +14,13 @@
         {% elif section == 'useful_links' %}
             <label for="useful_links">Useful Links:</label><br>
             <textarea name="useful_links" class="edit-box">{{ intro.useful_links }}</textarea><br>
+        {% elif section == 'emergency_help' %}
+            <label for="emergency_help">Emergency Help:</label><br>
+            <textarea name="emergency_help" class="edit-box">{{ intro.emergency_help }}</textarea><br>
+        {% elif section == 'transportation_info' %}
+            <label for="transportation_info">Transportation Info:</label><br>
+            <textarea name="transportation_info" class="edit-box">{{ intro.transportation_info }}</textarea><br>
         {% endif %}
-
-
         <input type="submit" value="Update">
         <button type="button" onclick="window.location.href='{{ url_for('city', city_name=city.name) }}'">Cancel</button>
     </form>

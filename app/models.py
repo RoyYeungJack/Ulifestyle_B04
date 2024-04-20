@@ -29,8 +29,8 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-   # blog_posts = db.relationship('BlogPost', backref='user')
-    #blog_types = db.relationship('BlogType', backref='user')
+    blog_postss = db.relationship('BlogPost', backref='user')
+
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -96,15 +96,18 @@ class Post(db.Model):
 # Yeung Yau Ki code
 
 class BlogType(db.Model):
+    __tablename__ = 'blogtype'
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(10), unique=True)
-    blog_posts = db.relationship('BlogPost', backref='blogtype', lazy=True)
+    blog_posts = db.relationship('BlogPost', backref='blogtype')
 
 
 class BlogPost(db.Model):
+    __tablename__ = 'blogpost'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
-    description = db.Column(db.String(600), nullable=False)
-   # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    blogtype_id = db.Column(db.Integer, db.ForeignKey('blog_type.id'))
+    description = db.Column(db.String(600))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    blogtype_id = db.Column(db.Integer, db.ForeignKey('blogtype.id'))
+    
     

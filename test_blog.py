@@ -23,7 +23,7 @@ type3 = BlogType(id=3,type='Pet')
 db.session.add_all([type1,type2,type3])
 
 
-bp1 = BlogPost(id=1,title='JP',description='good',blogtype_id=1)
+bp1 = BlogPost(id=1,title='JP',description='good',blogtype_id=1,user_id=1)
 db.session.add(bp1)
 
 

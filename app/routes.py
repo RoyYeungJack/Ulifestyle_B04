@@ -247,17 +247,21 @@ def update_city(city_name):
     # Get the new data from the form
     new_introduction = request.form.get('introduction')
     new_useful_links = request.form.get('useful_links')
-    # Get more data as needed
 
     # Find the city in the database
     city = City.query.filter_by(name=city_name).first()
 
     # If the city is found
     if city:
-        # Update the city's introduction
-        city.introduction.introduction = new_introduction
-        city.introduction.useful_links = new_useful_links
-        # Update more fields as needed
+        # Check if the introduction has changed
+        if new_introduction and new_introduction != city.introduction.introduction:
+            # Update the city's introduction
+            city.introduction.introduction = new_introduction
+
+        # Check if the useful_links has changed
+        if new_useful_links and new_useful_links != city.introduction.useful_links:
+            # Update the city's useful_links
+            city.introduction.useful_links = new_useful_links
 
         # Commit the changes to the database
         db.session.commit()

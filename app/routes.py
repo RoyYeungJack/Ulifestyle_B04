@@ -211,7 +211,7 @@ def Add_BlogPost():
             lastblogpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
             blogpost = BlogPost(id=lastblogpost.id + 1,
                                 title=form.title.data, description=form.desc.data,
-                                blogger_id=form.author_id.data)
+                                blogger_id=form.type.data)
             db.session.add(blogpost)
             db.session.commit()
             flash(_('Finish'))

@@ -112,6 +112,7 @@ class BlogType(db.Model):
     type = db.Column(db.String(10), unique=True)
     blogtype_posts = db.relationship('BlogPost', backref='blogtype', lazy=True)
 
+
 class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))

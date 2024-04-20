@@ -266,10 +266,14 @@ def update_city(city_name):
             # Update the city's useful_links
             city.introduction.useful_links = new_useful_links
         
+        # Check if the emergency_help has changed
         if new_emergency_help and new_emergency_help != city.introduction.emergency_help:
+            # Update the city's emergency_help
             city.introduction.emergency_help = new_emergency_help
 
+        # Check if the transportation_info has changed
         if new_transportation_info and new_transportation_info != city.introduction.transportation_info:
+            # Update the city's transportation_info
             city.introduction.transportation_info = new_transportation_info
 
         # Commit the changes to the database

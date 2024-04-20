@@ -232,11 +232,15 @@ def update_introduction(city_name):
 
 @app.route('/edit_city/<city_name>')
 def edit_city(city_name):
+    # Get the section to edit from the query parameters
+    section = request.args.get('section', 'introduction')
+
     # Find the city in the database
     city = City.query.filter_by(name=city_name).first()
 
     # Render the edit page
-    return render_template('edit_city.html.j2', city=city, intro=city.introduction)
+    return render_template('edit_city.html.j2', city=city, intro=city.introduction, section=section)
+
 
 @app.route('/update_city/<city_name>', methods=['POST'])
 def update_city(city_name):

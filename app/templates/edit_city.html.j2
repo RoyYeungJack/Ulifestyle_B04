@@ -8,13 +8,21 @@
 
 {% block content %}
     <h1>Edit {{ city.name }}</h1>
-    <form action="{{ url_for('update_city', city_name=city.name) }}" method="post">
-        <label for="introduction">Introduction:</label><br>
-        <textarea name="introduction" class="edit-box">{{ intro.introduction }}</textarea><br>
-        <label for="useful_links">Useful Links:</label><br>
-        <textarea name="useful_links" class="edit-box">{{ intro.useful_links }}</textarea><br>
+    <form action="{{ url_for('update_city', city_name=city.name, section=section) }}" method="post">
+        {% if section == 'introduction' %}
+            <label for="introduction">Introduction:</label><br>
+            <textarea name="introduction" class="edit-box">{{ intro.introduction }}</textarea><br>
+        {% elif section == 'useful_links' %}
+            <label for="useful_links">Useful Links:</label><br>
+            <textarea name="useful_links" class="edit-box">{{ intro.useful_links }}</textarea><br>
+            <label for="useful_links">Emergency Help:</label><br>
+            <textarea name="useful_links" class="edit-box">{{ intro.emergency_help }}</textarea><br>
+            <label for="useful_links">Transportation Info:</label><br>
+            <textarea name="useful_links" class="edit-box">{{ intro.transportation_info }}</textarea><br>
+        {% endif %}
 
 
         <input type="submit" value="Update">
+        <button type="button" onclick="window.location.href='{{ url_for('city', city_name=city.name) }}'">Cancel</button>
     </form>
 {% endblock %}

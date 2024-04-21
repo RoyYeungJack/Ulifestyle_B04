@@ -234,18 +234,17 @@ def Add_BlogType():
     return render_template('blog.html.j2', form=form)
 
 
-@app.route('/blog/edittype', methods=['GET', 'POST'])
+@app.route('/blog/edittype/<int:types_id>', methods=['GET', 'POST'])
 def Edit_Type(types_id):
-    types = BlogPost.query.get(types_id)
+    types = BlogType.query.get(types_id)
     form = EditBlogTypeForm()
-
     if form.validate_on_submit():
         types.type = form.updtype.data
         db.session.commit()
         flash('Type updated successfully.')
         return redirect(url_for('Blog'))
     form.updtype.data = types.type
-    return render_template('blog.html.j2', form=form, types=types)
+    return render_template('blog_type.html.j2', form=form, types=types)
 
 
 

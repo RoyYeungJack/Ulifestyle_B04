@@ -11,9 +11,14 @@
     {% endfor %}
 </ul></div>
 
+<div>
+{% for a in blogtypes %}
+    <a href="{{ url_for('Edit_Type', types_id = a.id) }}">Edit</a>
+{% endfor %}
+</div>
 
 
-<div></div>
+<div>
 {% for i in blog_posts %}
     {% if i.blogtype_id == blog_type_entry.id %}
         <h2><a href="{{ url_for('Blog_Post_Page', post_id = i.id) }}">{{ i.title }}</a></h2>
@@ -26,6 +31,9 @@
 
 
 
-
+{% if form %}
+    {{ wtf.quick_form(form) }}
+    <br/>
+{% endif %}
 
 {% endblock %}

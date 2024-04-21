@@ -7,6 +7,10 @@ from flask_babel import _, lazy_gettext as _l
 from app.models import BlogType
 
 
+class AddBlogTypeForm(FlaskForm):
+    bigtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
+    submit = SubmitField(('Submit'))
+
 
 class AddBlogPostForm(FlaskForm):
     title = TextAreaField(('Tittle'),validators=[Length(max=50), DataRequired()])
@@ -19,3 +23,9 @@ class AddBlogPostForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.type.choices = [(BlogType.id, BlogType.type) for BlogType in BlogType.query.all()]
 
+
+
+class EditBlogPostForm(FlaskForm):
+    title = TextAreaField('Title', validators=[Length(max=50), DataRequired()])
+    desc = TextAreaField('Description', validators=[Length(max=600), DataRequired()])
+    submit = SubmitField('Update')

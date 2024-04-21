@@ -8,7 +8,7 @@ from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Post, BlogPost, BlogType, BlogComt
-from app.formblog import AddBlogPostForm
+from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm
 
 
 
@@ -194,25 +194,53 @@ def unfollow(username):
 
 #---------------------------------------------------------------------
 
-@app.route('/blog', methods=['GET', 'POST'])
+@app.route('/blog/addtype', methods=['GET', 'POST'])
 def Blog():
     blogposts = BlogPost.query.all()
     blogtypes = BlogType.query.all()
     blogcomts = BlogComt.query.all()
     return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes,blogcomts=blogcomts)
 
-
 @app.route('/blog/add', methods=['GET', 'POST'])
+def Add_BlogType():
+    form= AddBlogTypeForm()
+    if form.validate_on_submit():
+        lastblogtype = BlogType.query.order_by(BlogType.id.desc()).first()
+        blogtype = BlogType(id=lastblogtype.id + 1, type=form.bigtype.data)
+        db.session.add(blogtype)
+        db.session.commit()
+        flash(_('Finish Add Type'))
+        return redirect(url_for('Blog'))
+    return render_template('blog.html.j2', form=form)
+
+@app.route('/blog/addpost', methods=['GET', 'POST'])
 def Add_BlogPost():
     form = AddBlogPostForm()
     if form.validate_on_submit():
             lastblogpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
+            selected_type = BlogType.query.filter_by(type=form.type.data).first()
             blogpost = BlogPost(id=lastblogpost.id + 1,
                                 title=form.title.data, description=form.desc.data,
-                                blogtype_id=form.type.data)
+                                blogtype_id=selected_type.id)
             db.session.add(blogpost)
             db.session.commit()
             flash(_('Finish'))
-            return redirect(url_for('Add_BlogPost'))
+            return redirect(url_for('Blog'))
     return render_template('blog.html.j2', form=form)
 
+@app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
+def Edit_BlogPost(post_id):
+    post = BlogPost.query.get_or_404(post_id)
+    form = EditBlogPostForm()
+
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.description = form.desc.data
+        db.session.commit()
+        flash('Post updated successfully.')
+        return redirect(url_for('Blog', post_id=post.id))
+
+    form.title.data = post.title
+    form.desc.data = post.description
+   
+    return render_template('blog.html.j2', form=form, post=post)

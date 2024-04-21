@@ -15,8 +15,10 @@
     {% for post in blogposts %}
         <h2>{{ post.title }}</h2>
         <p>{{ post.user.username }}</p>
-        <p>{{ post.blogtype.type }}</p>
+        <p>{{ post.blogtype.type }}{{ post.blogtype_id }} </p>
+        <a href="{{ url_for('Edit_BlogPost', post_id=post.id, edit_mode=True) }}">Edit</a>
     {% endfor %}
+
 </ul></div>
 
 </br></br></br></br></br>
@@ -25,7 +27,7 @@
     {% for cmt in blogcomts %}
         <p>{{ cmt.content}}</p>
         <p>{{ cmt.user.username }}</p>
-         <p>parent {{ cmt.parent_comment_id}}</p>
+        <p>parent {{ cmt.parent_comment_id}}</p>
     {% endfor %}
 </ul></div>
 
@@ -35,7 +37,7 @@
     <br/>
 {% endif %}
 
-<h2><a href="{{ url_for('Add_BlogPost') }}">ADD</a></h2>
-
+<h2><a href="{{ url_for('Add_BlogPost') }}">Add Post</a></h2>
+<h2><a href="{{ url_for('Add_BlogType') }}">Aadd Type</a></h2>
 
 {% endblock %}

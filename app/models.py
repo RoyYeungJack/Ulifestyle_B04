@@ -119,6 +119,7 @@ class CityIntroduction(db.Model):
         return f'<CityIntroduction {self.city_name}>'
 
 # Mandy
+
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
@@ -126,17 +127,6 @@ class Tag(db.Model):
 
     def __repr__(self) -> str:
         return f'<Tag {self.body}>'
-
-#Post-Tag Relationship
-post_tag = db.Table('post_tag',
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True))
-
-
-#Post-City Relationship
-post_city = db.Table('post_city',
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
-    db.Column('city_id', db.Integer, db.ForeignKey('city.id'), primary_key=True))
 
 class Post(db.Model): 
 
@@ -151,7 +141,6 @@ class Post(db.Model):
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
     
-
 
 # Yeung Yau Ki code
 

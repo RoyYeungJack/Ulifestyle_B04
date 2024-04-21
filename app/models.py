@@ -140,6 +140,9 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
+
+# class PostImage(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
     
 
 # Yeung Yau Ki code

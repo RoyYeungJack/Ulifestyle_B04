@@ -8,6 +8,7 @@ from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm, PostForm
 from app.models import Category, City, Tag, User, Post
 from app.email import send_password_reset_email
+from sqlalchemy.orm import sessionmaker
 
 
 @app.before_request
@@ -32,7 +33,6 @@ def index(): #Lau Mei Yan
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
    
-    # return render_template('index.html.j2', title=_('Home'))
 
 
 @app.route('/explore')
@@ -226,11 +226,11 @@ def newpost():
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
-# @app.route('/post/<int:post_id>')
-# def post_detail(post_id):
-#     post = get_post_by_id(post_id)
+@app.route('/post/<int:post_id>')
+def post_detail(post_id):
+    post = Post.query.get(post_id)
 
-#     if not post:
-#         return render_template('404.html.j2')
+    if not post:
+        return render_template('404.html.j2')
 
-#     return render_template('post_detail.html', post=post)
+    return render_template('post_detail.html.j2', post=post)

@@ -1,0 +1,16 @@
+{% extends "base.html.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+    <h1>{{ post.title }}</h1>
+    <div class="row">
+        <div class="col-md-4"><a href="{{ url_for('index', city_id=post.city.id) }}">{{ post.city.name }}</a></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">{{ post.body }}</div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4"><a href="{{ url_for('index', tag_name=post.tag.name) }}">{{ post.tag.name }}</a></div>
+    </div>
+{% endblock %}

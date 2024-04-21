@@ -1,19 +1,19 @@
 <table class="table table-hover">
     <tr>
-        <td style="width:10%">
+        <td style="width:20%">
             {% set user_link %}
             <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
             {% endset %}
             {{ _('%(username)s posted <br/> %(when)s',
             username=user_link, when=moment(post.timestamp).fromNow()) }}
         </td>
-        <td style="width:30%">
-            <a href="{{ url_for('index', post_id=post.id) }}">{{ post.title[:20] }}{{ '...' if post.title|length > 20 else '' }}</a>
+        <td style="width:40%">
+            <a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title[:40] }}{{ '...' if post.title|length > 20 else '' }}</a>
         </td>
-        <td style="width:30%">
+        <td style="width:20%">
             <a href="{{ url_for('index', city_id=post.city.id) }}">{{ post.city.name }}</a>
         </td>
-        <td style="width:30%">
+        <td style="width:20%">
             <a href="{{ url_for('index', tag_name=post.tag.name) }}">{{ post.tag.name }}</a>
         </td>
     </tr>

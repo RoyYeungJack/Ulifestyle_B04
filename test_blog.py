@@ -1,5 +1,5 @@
 from app import db, app
-from app.models import User, BlogType, BlogPost
+from app.models import User, BlogType, BlogPost, BlogComt
 
 app_context = app.app_context()
 app_context.push()
@@ -23,8 +23,13 @@ type3 = BlogType(id=3,type='Pet')
 db.session.add_all([type1,type2,type3])
 
 
-bp1 = BlogPost(id=1,title='JP',description='good',blogtype_id=1,user_id=1)
-db.session.add(bp1)
+post1 = BlogPost(id=1,title='JP',description='good',user_id=1 ,blogtype_id=1)
+post2 = BlogPost(id=2,title='apple',description='Bad',user_id=2 ,blogtype_id=2)
+db.session.add_all([post1,post2])
 
+
+comt1 = BlogComt(id=1, content='yo',user_id=1 ,blogpost_id=1,parent_comment_id=1)
+comt2 = BlogComt(id=2, content='no yo',user_id=2 ,blogpost_id=1,parent_comment_id=1)
+db.session.add_all([comt1,comt2])
 
 db.session.commit()

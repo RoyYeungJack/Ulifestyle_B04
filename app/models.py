@@ -30,7 +30,7 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     blog_postss = db.relationship('BlogPost', backref='user')
-
+    blog_comtss = db.relationship('BlogComt', backref='user')
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -109,5 +109,13 @@ class BlogPost(db.Model):
     description = db.Column(db.String(600))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     blogtype_id = db.Column(db.Integer, db.ForeignKey('blogtype.id'))
-    
-    
+    blog_comts = db.relationship('BlogComt', backref='blogpost')
+
+class BlogComt(db.Model):
+    __tablename__ = 'blogcomt'
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(200))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    blogpost_id = db.Column(db.Integer, db.ForeignKey('blogpost.id'))
+    parent_comment_id = db.Column(db.Integer, db.ForeignKey('blogcomt.id'))
+    parent_comment = db.relationship('BlogComt', backref='replies', remote_side=[id])

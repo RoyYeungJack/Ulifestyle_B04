@@ -7,7 +7,7 @@ from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, BlogPost, BlogType
+from app.models import User, Post, BlogPost, BlogType, BlogComt
 from app.formblog import AddBlogPostForm
 
 
@@ -198,11 +198,11 @@ def unfollow(username):
 def Blog():
     blogposts = BlogPost.query.all()
     blogtypes = BlogType.query.all()
-    return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes)
+    blogcomts = BlogComt.query.all()
+    return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes,blogcomts=blogcomts)
 
 
-
-@app.route('/blog/post', methods=['GET', 'POST'])
+@app.route('/blog/add', methods=['GET', 'POST'])
 def Add_BlogPost():
     form = AddBlogPostForm()
     if form.validate_on_submit():

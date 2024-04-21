@@ -12,16 +12,18 @@
 </ul></div>
 
 
+<div class="post">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.description }}</p>
+    <a href="{{ url_for('Edit_BlogPost', post_id=post.id, edit_mode=True) }}">Edit</a>
+</div>
 
-{% for i in blog_posts %}
-    {% if i.blogtype_id == blog_type_entry.id %}
-        <h2><a href="{{ url_for('Blog_Post_Page', post_id=i.id) }}">{{ i.title }}</a></h2>
-        <p>{{ i.description }}</p>
-        <p>{{ i.title }}</p>
-    {% endif %}
+{% for comment in comments %}
+    <div class="comment">
+        <p>{{ comment.content }}</p>
+        <p>{{ comment.user.username }}</p>
+    </div>
 {% endfor %}
-
-
 
 
 

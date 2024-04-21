@@ -28,8 +28,8 @@ post2 = BlogPost(id=2,title='apple',description='Bad',user_id=2 ,blogtype_id=2)
 db.session.add_all([post1,post2])
 
 
-comt1 = BlogComt(id=1, content='yo',user_id=1 ,blogpost_id=1,parent_comment_id=1)
-comt2 = BlogComt(id=2, content='no yo',user_id=2 ,blogpost_id=1,parent_comment_id=1)
+comt1 = BlogComt(id=1, content='yo',user_id=1 ,blogpost_id=1)
+comt2 = BlogComt(id=2, content='no yo',user_id=2 ,blogpost_id=2)
 db.session.add_all([comt1,comt2])
 
 db.session.commit()

@@ -194,14 +194,22 @@ def unfollow(username):
 
 #---------------------------------------------------------------------
 
-@app.route('/blog/addtype', methods=['GET', 'POST'])
+@app.route('/blog', methods=['GET', 'POST'])
 def Blog():
     blogposts = BlogPost.query.all()
     blogtypes = BlogType.query.all()
     blogcomts = BlogComt.query.all()
     return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes,blogcomts=blogcomts)
 
-@app.route('/blog/add', methods=['GET', 'POST'])
+@app.route('/blog/<blog_type>')
+def Blog_Type_Page(blog_type):
+    blog_type_entry = BlogType.query.filter_by(type=blog_type).first()
+
+    return render_template('blog_type.html.j2',blog_type=blog_type,blog_type_entry=blog_type_entry)
+
+
+
+@app.route('/blog/addtype', methods=['GET', 'POST'])
 def Add_BlogType():
     form= AddBlogTypeForm()
     if form.validate_on_submit():
@@ -212,6 +220,7 @@ def Add_BlogType():
         flash(_('Finish Add Type'))
         return redirect(url_for('Blog'))
     return render_template('blog.html.j2', form=form)
+
 
 @app.route('/blog/addpost', methods=['GET', 'POST'])
 def Add_BlogPost():

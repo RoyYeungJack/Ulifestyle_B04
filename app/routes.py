@@ -193,7 +193,7 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
-#jack base page---------------------------------------------------------------------
+#--------------------------jack base page----------------------------
 
 @app.route('/blog', methods=['GET', 'POST'])
 def Blog():
@@ -202,25 +202,24 @@ def Blog():
     blogcomts = BlogComt.query.all()
     random.shuffle(blogposts)
     random_posts = blogposts[:5]
-    return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes,
-                           blogcomts=blogcomts,random_posts=random_posts)
+    return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes, blogcomts=blogcomts,random_posts=random_posts)
 
 
 @app.route('/blog/<blog_type>')
 def Blog_Type_Page(blog_type):
     blogtypes = BlogType.query.all()
-    blog_type_entry = BlogType.query.filter_by(type=blog_type).first() #BlogType.type(Pet)
-    blog_posts = BlogPost.query.filter_by(blogtype_id=blog_type_entry.id).all()
+    blog_type_entry = BlogType.query.filter_by(type=blog_type).first() #BlogType.type(Pet) Object
+    blog_posts = BlogPost.query.filter_by(blogtype_id=blog_type_entry.id).all() #BP.btid=Pet.id(P1,P2) Object
     return render_template('blog_type.html.j2', blogtypes=blogtypes, blog_type_entry=blog_type_entry, blog_posts=blog_posts)
 
 @app.route('/blog/post/<int:post_id>')
 def Blog_Post_Page(post_id):
     blogtypes = BlogType.query.all()
-    post = BlogPost.query.get(post_id)
-    comments = post.blog_comts
-    return render_template('blog_post.html.j2', post=post, blogtypes=blogtypes,comments=comments)
+    postinf = BlogPost.query.get(post_id)
+    comments = postinf.blog_comts
+    return render_template('blog_post.html.j2', postinf=postinf, blogtypes=blogtypes, comments=comments)
 
-#jack form-----------------------------------------------------------------------
+#--------------------------jack form--------------------
 
 @app.route('/blog/addtype', methods=['GET', 'POST'])
 def Add_BlogType():
@@ -235,18 +234,17 @@ def Add_BlogType():
     return render_template('blog.html.j2', form=form)
 
 
-@app.route('/blog/edittype/<int:type_id>', methods=['GET', 'POST'])
-def Edit_BlogType(type_id):
-    types = BlogType.query.get_or_404(type_id)
+@app.route('/blog/edittype', methods=['GET', 'POST'])
+def Edit_Type(types_id):
+    types = BlogPost.query.get(types_id)
     form = EditBlogTypeForm()
 
     if form.validate_on_submit():
-        types.type = form.type.data
+        types.type = form.updtype.data
         db.session.commit()
         flash('Type updated successfully.')
-        return redirect(url_for('Blog', type_id=types.id))
-
-    form.type.data = types.type
+        return redirect(url_for('Blog'))
+    form.updtype.data = types.type
     return render_template('blog.html.j2', form=form, types=types)
 
 
@@ -267,9 +265,10 @@ def Add_BlogPost():
     return render_template('blog.html.j2', form=form)
 
 
+
 @app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
 def Edit_BlogPost(post_id):
-    post = BlogPost.query.get_or_404(post_id)
+    post = BlogPost.query.get(post_id)
     form = EditBlogPostForm()
 
     if form.validate_on_submit():
@@ -285,8 +284,6 @@ def Edit_BlogPost(post_id):
         db.session.commit()
         flash('Post updated successfully.')
         return redirect(url_for('Blog_Post_Page', post_id=post.id))
-
     form.title.data = post.title
     form.desc.data = post.description
-   
     return render_template('blog.html.j2', form=form, post=post)

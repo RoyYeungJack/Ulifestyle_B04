@@ -12,10 +12,10 @@
 </ul></div>
 
 
-<div class="post">
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.description }}</p>
-    <a href="{{ url_for('Edit_BlogPost', post_id = post.id, edit_mode=True) }}">Edit</a>
+<div>
+    <h1>{{ postinf.title }}</h1>
+    <p>{{ postinf.description }}</p>
+    <a href="{{ url_for('Edit_BlogPost', post_id = postinf.id) }}">Edit</a>
 </div>
 
 {% for comment in comments %}

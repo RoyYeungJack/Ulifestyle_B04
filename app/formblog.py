@@ -5,18 +5,19 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from flask_babel import _, lazy_gettext as _l
 from app.models import BlogType, BlogPost
-from app import app, db
 
 class AddBlogTypeForm(FlaskForm):
     addtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
     submit = SubmitField(('Submit'))
 
 class EditBlogTypeForm(FlaskForm):
-    type = StringField('Type Name', validators=[Length(max=50), DataRequired()])
+    type_id = SelectField('Type', choices=[], validators=[DataRequired()])
+    updtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
     delete = SubmitField('Delete')
-    submit = SubmitField('Submit')
-    
-
+    submit = SubmitField('Submit')  
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.type_id.choices = [(blogtype.id, blogtype.type) for blogtype in BlogType.query.all()]
 
 class AddBlogPostForm(FlaskForm):
     title = TextAreaField(('Tittle'),validators=[Length(max=50), DataRequired()])

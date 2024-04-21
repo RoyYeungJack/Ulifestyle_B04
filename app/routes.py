@@ -224,7 +224,7 @@ def Blog_Post_Page(post_id):
 
 @app.route('/blog/addtype', methods=['GET', 'POST'])
 def Add_BlogType():
-    form= AddBlogTypeForm()
+    form = AddBlogTypeForm()
     if form.validate_on_submit():
         lasttype = BlogType.query.order_by(BlogType.id.desc()).first()
         blogtype = BlogType(id=lasttype.id + 1, type=form.addtype.data)
@@ -235,19 +235,19 @@ def Add_BlogType():
     return render_template('blog.html.j2', form=form)
 
 
-#@app.route('/blog/edittype/<int:type_id>', methods=['GET', 'POST'])
-#def Edit_BlogType(type_id):
-#    types = BlogType.query.get_or_404(type_id)
-#    form = EditBlogTypeForm()
-#
-#    if form.validate_on_submit():
-#        types.type = form.type.data
-#        db.session.commit()
-#        flash('Type updated successfully.')
-#        return redirect(url_for('Blog', type_id=types.id))
-#
-#    form.type.data = types.type
-#    return render_template('blog.html.j2', form=form, types=types)
+@app.route('/blog/edittype/<int:type_id>', methods=['GET', 'POST'])
+def Edit_BlogType(type_id):
+    types = BlogType.query.get_or_404(type_id)
+    form = EditBlogTypeForm()
+
+    if form.validate_on_submit():
+        types.type = form.type.data
+        db.session.commit()
+        flash('Type updated successfully.')
+        return redirect(url_for('Blog', type_id=types.id))
+
+    form.type.data = types.type
+    return render_template('blog.html.j2', form=form, types=types)
 
 
 

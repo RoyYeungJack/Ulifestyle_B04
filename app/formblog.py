@@ -18,8 +18,6 @@ class EditBlogTypeForm(FlaskForm):
     
 
 
-
-
 class AddBlogPostForm(FlaskForm):
     title = TextAreaField(('Tittle'),validators=[Length(max=50), DataRequired()])
     dct = TextAreaField(('Description'),

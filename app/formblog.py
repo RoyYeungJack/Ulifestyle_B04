@@ -4,25 +4,32 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from flask_babel import _, lazy_gettext as _l
-from app.models import BlogType
-
+from app.models import BlogType, BlogPost
+from app import app, db
 
 class AddBlogTypeForm(FlaskForm):
-    bigtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
+    addtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
     submit = SubmitField(('Submit'))
+
+class EditBlogTypeForm(FlaskForm):
+    type = StringField('Type Name', validators=[Length(max=50), DataRequired()])
+    delete = SubmitField('Delete')
+    submit = SubmitField('Submit')
+    
+
+
 
 
 class AddBlogPostForm(FlaskForm):
     title = TextAreaField(('Tittle'),validators=[Length(max=50), DataRequired()])
-    desc = TextAreaField(('Description'),
+    dct = TextAreaField(('Description'),
                          validators=[Length(max=600), DataRequired()])
-    type = SelectField('Type', choices=[], validators=[DataRequired()])
+    type_id = SelectField('Type', choices=[], validators=[DataRequired()])
     submit = SubmitField(('Submit'))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.type.choices = [(BlogType.id, BlogType.type) for BlogType in BlogType.query.all()]
-
+        self.type_id.choices = [(blogtype.id, blogtype.type) for blogtype in BlogType.query.all()]
 
 
 class EditBlogPostForm(FlaskForm):

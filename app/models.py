@@ -98,7 +98,7 @@ class Post(db.Model):
 class BlogType(db.Model):
     __tablename__ = 'blogtype'
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(10), unique=True)
+    type = db.Column(db.String(10))
     blog_posts = db.relationship('BlogPost', backref='blogtype')
 
 

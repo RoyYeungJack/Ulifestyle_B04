@@ -4,9 +4,9 @@
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 <ul class="nav navbar-nav">
-    {% for blogtype in blogtypes %}
+    {% for x in blogtypes %}
         <li>
-        <a href="{{ url_for('Blog_Type_Page', blog_type=blogtype.type) }}">{{ blogtype.type }}</a>
+        <a href="{{ url_for('Blog_Type_Page', blog_type = x.type) }}">{{ x.type }}</a>
         </li>
     {% endfor %}
 </ul></div>
@@ -15,11 +15,13 @@
 
 {% for i in blog_posts %}
     {% if i.blogtype_id == blog_type_entry.id %}
-        <h2><a href="{{ url_for('Blog_Post_Page', post_id=i.id) }}">{{ i.title }}</a></h2>
+        <h2><a href="{{ url_for('Blog_Post_Page', post_id = i.id) }}">{{ i.title }}</a></h2>
         <p>{{ i.description }}</p>
         <p>{{ i.title }}</p>
     {% endif %}
 {% endfor %}
+
+
 
 
 

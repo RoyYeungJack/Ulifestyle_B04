@@ -9,7 +9,7 @@ from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Post, BlogPost, BlogType, BlogComt
-from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm
+from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, EditBlogTypeForm
 
 
 
@@ -193,7 +193,7 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
-#base page---------------------------------------------------------------------
+#jack base page---------------------------------------------------------------------
 
 @app.route('/blog', methods=['GET', 'POST'])
 def Blog():
@@ -211,24 +211,23 @@ def Blog_Type_Page(blog_type):
     blogtypes = BlogType.query.all()
     blog_type_entry = BlogType.query.filter_by(type=blog_type).first() #BlogType.type(Pet)
     blog_posts = BlogPost.query.filter_by(blogtype_id=blog_type_entry.id).all()
-    return render_template('blog_type.html.j2',blogtypes=blogtypes,
-                           blog_type_entry=blog_type_entry,blog_posts=blog_posts)
+    return render_template('blog_type.html.j2', blogtypes=blogtypes, blog_type_entry=blog_type_entry, blog_posts=blog_posts)
 
 @app.route('/blog/post/<int:post_id>')
 def Blog_Post_Page(post_id):
     blogtypes = BlogType.query.all()
     post = BlogPost.query.get(post_id)
     comments = post.blog_comts
-    return render_template('blog_post.html.j2', post=post,blogtypes=blogtypes,comments=comments)
+    return render_template('blog_post.html.j2', post=post, blogtypes=blogtypes,comments=comments)
 
-#form -------------------------------------------------------
+#jack form-----------------------------------------------------------------------
 
 @app.route('/blog/addtype', methods=['GET', 'POST'])
 def Add_BlogType():
     form= AddBlogTypeForm()
     if form.validate_on_submit():
-        lastblogtype = BlogType.query.order_by(BlogType.id.desc()).first()
-        blogtype = BlogType(id=lastblogtype.id + 1, type=form.bigtype.data)
+        lasttype = BlogType.query.order_by(BlogType.id.desc()).first()
+        blogtype = BlogType(id=lasttype.id + 1, type=form.addtype.data)
         db.session.add(blogtype)
         db.session.commit()
         flash(_('Finish Add Type'))
@@ -236,19 +235,35 @@ def Add_BlogType():
     return render_template('blog.html.j2', form=form)
 
 
+#@app.route('/blog/edittype/<int:type_id>', methods=['GET', 'POST'])
+#def Edit_BlogType(type_id):
+#    types = BlogType.query.get_or_404(type_id)
+#    form = EditBlogTypeForm()
+#
+#    if form.validate_on_submit():
+#        types.type = form.type.data
+#        db.session.commit()
+#        flash('Type updated successfully.')
+#        return redirect(url_for('Blog', type_id=types.id))
+#
+#    form.type.data = types.type
+#    return render_template('blog.html.j2', form=form, types=types)
+
+
+
+
 @app.route('/blog/addpost', methods=['GET', 'POST'])
 def Add_BlogPost():
     form = AddBlogPostForm()
     if form.validate_on_submit():
-            lastblogpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
-            selected_type = BlogType.query.filter_by(type=form.type.data).first()
-            blogpost = BlogPost(id=lastblogpost.id + 1,
-                                title=form.title.data, description=form.desc.data,
-                                blogtype_id=selected_type.id)
-            db.session.add(blogpost)
-            db.session.commit()
-            flash(_('Finish'))
-            return redirect(url_for('Blog'))
+        lastgpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
+        blogpost = BlogPost(id=lastgpost.id + 1,title=form.title.data, 
+                            description=form.dct.data, blogtype_id=form.type_id.data)
+        
+        db.session.add(blogpost)
+        db.session.commit()
+        flash(_('Finish'))
+        return redirect(url_for('Blog'))
     return render_template('blog.html.j2', form=form)
 
 
@@ -256,12 +271,10 @@ def Add_BlogPost():
 def Edit_BlogPost(post_id):
     post = BlogPost.query.get_or_404(post_id)
     form = EditBlogPostForm()
-    postcmt = BlogComt.query.filter_by(blogpost_id=post.id).all()
 
     if form.validate_on_submit():
         if form.delete.data:  # delete detect
-            for cmt in postcmt:
-                db.session.delete(cmt)
+            BlogComt.query.filter_by(blogpost_id=post.id).delete() 
             db.session.delete(post)
             db.session.commit()
             flash('Post deleted successfully.')
@@ -276,4 +289,4 @@ def Edit_BlogPost(post_id):
     form.title.data = post.title
     form.desc.data = post.description
    
-    return render_template('blog.html.j2', form=form, post=post, postcmt=postcmt)
+    return render_template('blog.html.j2', form=form, post=post)

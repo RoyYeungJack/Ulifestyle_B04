@@ -14,4 +14,10 @@ db.engine.execute("DROP TABLE blogger CASCADE")
 
 
 flask --debug run --host=0.0.0.0
+
+
+
+selected_type_id = form.type_id.data
+selected_type = BlogType.query.get(selected_type_id)
+description = selected_type.description
 ----------------------------------

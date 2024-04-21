@@ -28,4 +28,5 @@ class AddBlogPostForm(FlaskForm):
 class EditBlogPostForm(FlaskForm):
     title = TextAreaField('Title', validators=[Length(max=50), DataRequired()])
     desc = TextAreaField('Description', validators=[Length(max=600), DataRequired()])
+    delete = SubmitField('Delete')
     submit = SubmitField('Update')

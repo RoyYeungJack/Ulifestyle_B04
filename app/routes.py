@@ -193,7 +193,7 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
-#---------------------------------------------------------------------
+#base page---------------------------------------------------------------------
 
 @app.route('/blog', methods=['GET', 'POST'])
 def Blog():
@@ -221,9 +221,7 @@ def Blog_Post_Page(post_id):
     comments = post.blog_comts
     return render_template('blog_post.html.j2', post=post,blogtypes=blogtypes,comments=comments)
 
-
-
-
+#form -------------------------------------------------------
 
 @app.route('/blog/addtype', methods=['GET', 'POST'])
 def Add_BlogType():
@@ -253,19 +251,29 @@ def Add_BlogPost():
             return redirect(url_for('Blog'))
     return render_template('blog.html.j2', form=form)
 
+
 @app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
 def Edit_BlogPost(post_id):
     post = BlogPost.query.get_or_404(post_id)
     form = EditBlogPostForm()
+    postcmt = BlogComt.query.filter_by(blogpost_id=post.id).all()
 
     if form.validate_on_submit():
+        if form.delete.data:  # delete detect
+            for cmt in postcmt:
+                db.session.delete(cmt)
+            db.session.delete(post)
+            db.session.commit()
+            flash('Post deleted successfully.')
+            return redirect(url_for('Blog'))
+        
         post.title = form.title.data
         post.description = form.desc.data
         db.session.commit()
         flash('Post updated successfully.')
-        return redirect(url_for('Blog', post_id=post.id))
+        return redirect(url_for('Blog_Post_Page', post_id=post.id))
 
     form.title.data = post.title
     form.desc.data = post.description
    
-    return render_template('blog.html.j2', form=form, post=post)
+    return render_template('blog.html.j2', form=form, post=post, postcmt=postcmt)

@@ -3,17 +3,23 @@
         <td style="width:10%">
             {% set user_link %}
             <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
-        {% endset %}
-        {{ _('%(username)s posted <br/> %(when)s',
-        username=user_link, when=moment(post.timestamp).fromNow()) }}
+            {% endset %}
+            {{ _('%(username)s posted <br/> %(when)s',
+            username=user_link, when=moment(post.timestamp).fromNow()) }}
         </td>
-        <br/>
         <td style="width:30%">
-        {# Lau Mei Yan #}
-        {{ post.title}}
+            <a href="{{ url_for('index', post_id=post.id) }}">{{ post.title[:20] }}{{ '...' if post.title|length > 20 else '' }}</a>
         </td>
-        <td style="width:60%">
-        {{ post.body }}
+        <td style="width:30%">
+            <a href="{{ url_for('index', city_id=post.city.id) }}">{{ post.city.name }}</a>
+        </td>
+        <td style="width:30%">
+            <a href="{{ url_for('index', tag_name=post.tag.name) }}">{{ post.tag.name }}</a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            {{ post.body }}
         </td>
     </tr>
 </table>

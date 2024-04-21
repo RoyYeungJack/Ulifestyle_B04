@@ -3,10 +3,11 @@ from datetime import datetime, timedelta, timezone
 from hashlib import md5
 from app import app, db, login
 import jwt
-
+from sqlalchemy import Text
 from flask_login import UserMixin
 
 from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 followers = db.Table(
@@ -81,11 +82,61 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
+# Gordy
 
-#Lau Mei Yan
-# class Tag(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(50), unique=True)
+class Country(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    cities = db.relationship('City', backref='country', lazy=True)
+
+    def __repr__(self):
+        return f'<Country {self.name}>'
+
+class City(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    country_id = db.Column(db.Integer, db.ForeignKey('country.id'))
+    posts = db.relationship('Post', backref='city', lazy='dynamic')
+
+    def __repr__(self):
+        return f'<City {self.name}>'
+    
+class CityIntroduction(db.Model):
+    city_name = db.Column(db.String(50), db.ForeignKey('city.name'), primary_key=True)
+    introduction = db.Column(Text)
+    useful_links = db.Column(Text)
+    emergency_help = db.Column(Text)
+    transportation_info = db.Column(Text)
+    climate = db.Column(Text)
+    festivals = db.Column(Text)
+    tags = db.Column(Text)
+    related_content = db.Column(Text)
+    image_path = db.Column(db.String(200))
+
+    city = db.relationship('City', backref=db.backref('introduction', uselist=False))
+
+    def __repr__(self):
+        return f'<CityIntroduction {self.city_name}>'
+
+# Mandy
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    posts = db.relationship('Post', backref='tag', lazy='dynamic')
+
+    def __repr__(self) -> str:
+        return f'<Tag {self.body}>'
+
+#Post-Tag Relationship
+post_tag = db.Table('post_tag',
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True))
+
+
+#Post-City Relationship
+post_city = db.Table('post_city',
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
+    db.Column('city_id', db.Integer, db.ForeignKey('city.id'), primary_key=True))
 
 class Post(db.Model): 
 
@@ -94,21 +145,12 @@ class Post(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    # city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
-    # tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+    city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
     
-# #Post-Tag Relationship
-# post_tag = db.Table('post',
-#     db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
-#     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)
-
-# #Post-City Relationship
-# post_city = db.Table('post_city',
-#     db.Column('post_id', db.Integer, db.ForeignKey('post.id'), primary_key=True),
-#     db.Column('city_id', db.Integer, db.ForeignKey('city.id'), primary_key=True)
 
 
 # Yeung Yau Ki code

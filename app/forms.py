@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-    TextAreaField
+from wtforms import HiddenField, StringField, PasswordField, BooleanField, SubmitField, \
+    TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from flask_babel import _, lazy_gettext as _l
-from app.models import User
+from app.models import User, City
 
 
 class LoginForm(FlaskForm):
@@ -63,8 +63,15 @@ class EditProfileForm(FlaskForm):
             if user is not None:
                 raise ValidationError(_('Please use a different username.'))
 
-
+# Mandy
 class PostForm(FlaskForm):
     title = StringField(_l('Title'), validators=[DataRequired(), Length(max=255)])
     post = TextAreaField(_l('Write something'), validators=[DataRequired()])
+    city = SelectField('City', coerce=int, validators=[DataRequired()])
+    city_id = HiddenField()
+    tag = StringField('Tag', validators=[Length(max=50)])
     submit = SubmitField(_l('Submit'))
+
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.city.choices = [(city.id, city.name) for city in City.query.all()]

@@ -5,8 +5,8 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
-    ResetPasswordRequestForm, ResetPasswordForm
-from app.models import Category, User, Post
+    ResetPasswordRequestForm, ResetPasswordForm, PostForm
+from app.models import Category, City, Tag, User, Post
 from app.email import send_password_reset_email
 
 
@@ -54,18 +54,21 @@ def explore():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash(_('Invalid username or password'))
+            flash('Invalid username or password!')
             return redirect(url_for('login'))
+
         login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
+
+        next_page = request.args.get("next")
+        if not next_page or url_parse(next_page).netloc != "":
             next_page = url_for('index')
-        redirect(next_page)
-    return render_template('login.html.j2', title=_('Sign In'), form=form)
+        return redirect(next_page)
+    return render_template('login.html.j2', title="Sign In", form=form)
 
 
 @app.route('/logout')
@@ -190,13 +193,24 @@ def categories():
     categories = Category.query.all()
     return render_template('categories.html.j2', title=_('Categories'), categories=categories)
     
+# Mandy
 @app.route('/newpost', methods=['GET', 'POST'])
 @login_required
 def newpost():
     form = PostForm()
     if form.validate_on_submit():
         #Lau Mei Yan
-        post = Post(title=form.title.data, body=form.post.data, author=current_user)
+        city_id = form.city.data
+        city = City.query.get(city_id)
+
+        tag_name = form.tag.data
+        tag = Tag.query.filter_by(name=tag_name).first()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.session.add(tag)
+            db.session.commit()
+
+        post = Post(title=form.title.data, body=form.post.data, city=city, tag=tag, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash(_('Your post is now live!'))
@@ -211,3 +225,12 @@ def newpost():
     return render_template('newpost.html.j2', title=_('New Post'), form=form,
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
+
+# @app.route('/post/<int:post_id>')
+# def post_detail(post_id):
+#     post = get_post_by_id(post_id)
+
+#     if not post:
+#         return render_template('404.html.j2')
+
+#     return render_template('post_detail.html', post=post)

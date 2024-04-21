@@ -5,8 +5,10 @@
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 <ul class="nav navbar-nav">
-    {% for type in blogtypes %}
-        <li><a href="{{ blog }}">{{ type.type }}</a></li>
+    {% for blogtype in blogtypes %}
+        <li>
+        <a href="{{ url_for('Blog_Type_Page', blog_type=blogtype.type) }}">{{ blogtype.type }}</a>
+        </li>
     {% endfor %}
 </ul></div>
 

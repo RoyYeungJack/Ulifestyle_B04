@@ -18,6 +18,12 @@
     <a href="{{ url_for('Edit_BlogPost', post_id = postinf.id) }}">Edit</a>
 </div>
 
+
+<div>
+    <a href="{{ url_for('Add_Comt', post_id = postinf.id) }}">Add Comt</a>
+</div>
+
+
 {% for comment in comments %}
     <div class="comment">
         <p>{{ comment.content }}</p>
@@ -25,6 +31,9 @@
     </div>
 {% endfor %}
 
-
+{% if form %}
+    {{ wtf.quick_form(form) }}
+    <br/>
+{% endif %}
 
 {% endblock %}

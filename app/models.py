@@ -117,5 +117,3 @@ class BlogComt(db.Model):
     content = db.Column(db.String(200))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     blogpost_id = db.Column(db.Integer, db.ForeignKey('blogpost.id'))
-   # parent_comment_id = db.Column(db.Integer, db.ForeignKey('blogcomt.id'))
-   # parent_comment = db.relationship('BlogComt', backref='replies', remote_side=[id])

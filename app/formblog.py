@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from flask_babel import _, lazy_gettext as _l
-from app.models import BlogType, BlogPost
+from app.models import BlogType, BlogPost, BlogComt
 
 class AddBlogTypeForm(FlaskForm):
     addtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
@@ -36,3 +36,7 @@ class EditBlogPostForm(FlaskForm):
     desc = TextAreaField('Description', validators=[Length(max=600), DataRequired()])
     delete = SubmitField('Delete')
     submit = SubmitField('Update')
+
+class AddPostComtForm(FlaskForm):
+    content = TextAreaField('Description', validators=[Length(max=600), DataRequired()])
+    submit = SubmitField(('Submit'))

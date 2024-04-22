@@ -12,24 +12,30 @@ db.create_all()
 
 u1 = User(id=1,username='John', email='1@gmail.com')
 u2 = User(id=2,username='Mary', email='2@gmail.com')
+u3 = User(id=3,username='May', email='3@gmail.com')
 u1.set_password("1")
 u2.set_password("2")
-db.session.add_all([u1,u2])
+db.session.add_all([u1,u2,u3])
 
 
 type1 = BlogType(id=1,type='Travel')
 type2 = BlogType(id=2,type='Food')
 type3 = BlogType(id=3,type='Pet')
+type4 = BlogType(id=3,type='Girl')
 db.session.add_all([type1,type2,type3])
 
 
-post1 = BlogPost(id=1,title='JP',description='good',user_id=1 ,blogtype_id=1)
-post2 = BlogPost(id=2,title='apple',description='Bad',user_id=2 ,blogtype_id=2)
-db.session.add_all([post1,post2])
+p1 = BlogPost(id=1,title='JP Tokyo Relax Place',user_id=1 ,blogtype_id=1,description='Vibrant cityscape, bustling streets, and rich cultural heritage, Tokyo is a captivating metropolis where tradition meets innovation.')
+p2 = BlogPost(id=2,title='TW TaiPai Fun Place',user_id=2 ,blogtype_id=1,description='Enchanting landscapes, delectable cuisine, and warm hospitality define Taiwan, an island nation blending tradition and modernity harmoniously.')
+p3 = BlogPost(id=3, title='Apple', user_id=2, blogtype_id=2, description='Apple is very good')
+p4 = BlogPost(id=4, title='Orange', user_id=2, blogtype_id=2, description='Orange is very good')
+p5 = BlogPost(id=5, title='Dog', user_id=3, blogtype_id=3, description='Dog is very good')
+p6 = BlogPost(id=6, title='Cat', user_id=3, blogtype_id=3, description='Cat is very good')
+db.session.add_all([p1,p2,p3,p4,p5,p6])
 
 
-comt1 = BlogComt(id=1, content='yo',user_id=1 ,blogpost_id=1)
-comt2 = BlogComt(id=2, content='no yo',user_id=2 ,blogpost_id=2)
+comt1 = BlogComt(id=1, content='sound good',user_id=1 ,blogpost_id=1)
+comt2 = BlogComt(id=2, content='oh no',user_id=2 ,blogpost_id=2)
 db.session.add_all([comt1,comt2])
 
 db.session.commit()

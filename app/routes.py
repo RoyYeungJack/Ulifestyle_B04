@@ -9,7 +9,7 @@ from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Post, BlogPost, BlogType, BlogComt
-from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, EditBlogTypeForm
+from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, EditBlogTypeForm, AddPostComtForm
 
 
 
@@ -246,8 +246,7 @@ def Edit_Type(types_id):
     form.updtype.data = types.type
     return render_template('blog_type.html.j2', form=form, types=types)
 
-
-
+#-------------------------------------------------------------------------
 
 @app.route('/blog/addpost', methods=['GET', 'POST'])
 def Add_BlogPost():
@@ -262,7 +261,6 @@ def Add_BlogPost():
         flash(_('Finish'))
         return redirect(url_for('Blog'))
     return render_template('blog.html.j2', form=form)
-
 
 
 @app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
@@ -286,3 +284,24 @@ def Edit_BlogPost(post_id):
     form.title.data = post.title
     form.desc.data = post.description
     return render_template('blog.html.j2', form=form, post=post)
+
+#-------------------------------------------------------------------------
+
+@app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
+def Add_Comt(post_id):
+    postinf = BlogPost.query.get(post_id) # P1(1)
+    postcmt = BlogComt.query.filter_by(blogpost_id=postinf.id).first() #C1=P1
+    form = AddPostComtForm()
+    if form.validate_on_submit():
+        lastcomt = BlogComt.query.order_by(BlogComt.id.desc()).all()
+        
+        
+        if lastcomt is not None:
+            blogpostcmt = BlogComt(id=lastcomt.id + 1, content=form.content.data, blogpost_id=post_id)
+        elif lastcomt is None:
+            blogpostcmt = BlogComt(id=1, content=form.content.data, blogpost_id=post_id)
+        db.session.add(blogpostcmt)
+        db.session.commit()
+        flash(_('Finish'))
+        return redirect(url_for('Blog'))
+    return render_template('blog_post.html.j2', form=form, postcmt=postcmt,postinf=postinf)

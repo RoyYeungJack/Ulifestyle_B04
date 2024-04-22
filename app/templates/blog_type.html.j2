@@ -13,7 +13,7 @@
 
 <div>
 {% for a in blogtypes %}
-    <a href="{{ url_for('Edit_Type', types_id = a.id) }}">Edit</a>
+    <a href="{{ url_for('Edit_Blog_Type', types_id = a.id) }}">Edit</a>
 {% endfor %}
 </div>
 

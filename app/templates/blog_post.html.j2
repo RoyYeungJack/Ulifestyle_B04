@@ -15,12 +15,12 @@
 <div>
     <h1>{{ postinf.title }}</h1>
     <p>{{ postinf.description }}</p>
-    <a href="{{ url_for('Edit_BlogPost', post_id = postinf.id) }}">Edit</a>
+    <a href="{{ url_for('Edit_Blog_Post', post_id = postinf.id) }}">Edit</a>
 </div>
 
 
 <div>
-    <a href="{{ url_for('Add_Comt', post_id = postinf.id) }}">Add Comt</a>
+    <a href="{{ url_for('Add_Post_Comt', post_id = postinf.id) }}">Add Comt</a>
 </div>
 
 

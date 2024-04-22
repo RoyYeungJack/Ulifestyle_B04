@@ -222,11 +222,11 @@ def Blog_Post_Page(post_id):
 #--------------------------jack form--------------------
 
 @app.route('/blog/addtype', methods=['GET', 'POST'])
-def Add_BlogType():
+def Add_Blog_Type():
     form = AddBlogTypeForm()
     if form.validate_on_submit():
-        lasttype = BlogType.query.order_by(BlogType.id.desc()).first()
-        blogtype = BlogType(id=lasttype.id + 1, type=form.addtype.data)
+        count_id = BlogType.query.count()
+        blogtype = BlogType(id=count_id + 1, type=form.addtype.data)
         db.session.add(blogtype)
         db.session.commit()
         flash(_('Finish Add Type'))
@@ -235,13 +235,18 @@ def Add_BlogType():
 
 
 @app.route('/blog/edittype/<int:types_id>', methods=['GET', 'POST'])
-def Edit_Type(types_id):
+def Edit_Blog_Type(types_id):
     types = BlogType.query.get(types_id)
     form = EditBlogTypeForm()
     if form.validate_on_submit():
-        types.type = form.updtype.data
-        db.session.commit()
-        flash('Type updated successfully.')
+        if form.delete.data:
+            db.session.delete(types)
+            db.session.commit()
+            flash('Type deleted successfully.')
+        else:
+            types.type = form.updtype.data
+            db.session.commit()
+            flash('Type updated successfully.')
         return redirect(url_for('Blog'))
     form.updtype.data = types.type
     return render_template('blog_type.html.j2', form=form, types=types)
@@ -249,7 +254,7 @@ def Edit_Type(types_id):
 #-------------------------------------------------------------------------
 
 @app.route('/blog/addpost', methods=['GET', 'POST'])
-def Add_BlogPost():
+def Add_Blog_Post():
     form = AddBlogPostForm()
     if form.validate_on_submit():
         lastgpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
@@ -264,7 +269,7 @@ def Add_BlogPost():
 
 
 @app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
-def Edit_BlogPost(post_id):
+def Edit_Blog_Post(post_id):
     post = BlogPost.query.get(post_id)
     form = EditBlogPostForm()
 
@@ -288,20 +293,16 @@ def Edit_BlogPost(post_id):
 #-------------------------------------------------------------------------
 
 @app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
-def Add_Comt(post_id):
+def Add_Post_Comt(post_id):
     postinf = BlogPost.query.get(post_id) # P1(1)
-    postcmt = BlogComt.query.filter_by(blogpost_id=postinf.id).first() #C1=P1
+
     form = AddPostComtForm()
     if form.validate_on_submit():
-        lastcomt = BlogComt.query.order_by(BlogComt.id.desc()).all()
+        count_id_num = BlogComt.query.count()
+        comt = BlogComt(id=count_id_num + 1, blogpost_id=post_id, content=form.content.data )
         
-        
-        if lastcomt is not None:
-            blogpostcmt = BlogComt(id=lastcomt.id + 1, content=form.content.data, blogpost_id=post_id)
-        elif lastcomt is None:
-            blogpostcmt = BlogComt(id=1, content=form.content.data, blogpost_id=post_id)
-        db.session.add(blogpostcmt)
+        db.session.add(comt)
         db.session.commit()
         flash(_('Finish'))
         return redirect(url_for('Blog'))
-    return render_template('blog_post.html.j2', form=form, postcmt=postcmt,postinf=postinf)
+    return render_template('blog_post.html.j2', form=form,postinf=postinf)

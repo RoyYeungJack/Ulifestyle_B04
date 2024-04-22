@@ -11,8 +11,8 @@ class AddBlogTypeForm(FlaskForm):
     submit = SubmitField(('Submit'))
 
 class EditBlogTypeForm(FlaskForm):
-    type_id = SelectField('Type', choices=[], validators=[DataRequired()])
-    updtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
+    type_id = SelectField('Want To Edit', choices=[], validators=[DataRequired()])
+    updtype = TextAreaField(('Rename'),validators=[Length(max=50), DataRequired()])
     delete = SubmitField('Delete')
     submit = SubmitField('Submit')  
     def __init__(self, *args, **kwargs):

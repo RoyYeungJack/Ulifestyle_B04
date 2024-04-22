@@ -15,7 +15,7 @@
 <div>
     <h1>{{ postinf.title }}</h1>
     <p>{{ postinf.description }}</p>
-    <a href="{{ url_for('Edit_Type', post_id = postinf.id) }}">Edit</a>
+    <a href="{{ url_for('Edit_BlogPost', post_id = postinf.id) }}">Edit</a>
 </div>
 
 {% for comment in comments %}

@@ -32,6 +32,4 @@ db.session.add(p1)
 db.session.add(p2)
 
 
-
-
 db.session.commit()

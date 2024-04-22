@@ -6,9 +6,9 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm, PostForm
-from app.models import Category, City, Tag, User, Post
+from app.models import City, Tag, User, Post
 from app.email import send_password_reset_email
-from sqlalchemy.orm import sessionmaker
+
 
 
 @app.before_request
@@ -187,11 +187,6 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
-
-@app.route('/categories', methods=['GET'])
-def categories():
-    categories = Category.query.all()
-    return render_template('categories.html.j2', title=_('Categories'), categories=categories)
     
 # Mandy
 @app.route('/newpost', methods=['GET', 'POST'])

@@ -137,19 +137,41 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+    images = db.relationship('PostImage', backref='image', lazy='dynamic')
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
 
-# class PostImage(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-    
+class PostImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    imagepath = db.Column(db.String(140))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+
 
 # Yeung Yau Ki code
 
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
+# class BlogType(db.Model):
+#     __tablename__ = 'blogtype'
+#     id = db.Column(db.Integer, primary_key=True)
+#     type = db.Column(db.String(10))
+#     blog_posts = db.relationship('BlogPost', backref='blogtype')
 
-    def __repr__(self) -> str:
-        return f'<Category {self.name}>'
+
+# class BlogPost(db.Model):
+#     __tablename__ = 'blogpost'
+#     id = db.Column(db.Integer, primary_key=True)
+#     title = db.Column(db.String(50))
+#     description = db.Column(db.String(600))
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     blogtype_id = db.Column(db.Integer, db.ForeignKey('blogtype.id'))
+#     blog_comts = db.relationship('BlogComt', backref='blogpost')
+
+# class BlogComt(db.Model):
+#     __tablename__ = 'blogcomt'
+#     id = db.Column(db.Integer, primary_key=True)
+#     content = db.Column(db.String(200))
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     blogpost_id = db.Column(db.Integer, db.ForeignKey('blogpost.id'))
+#    # parent_comment_id = db.Column(db.Integer, db.ForeignKey('blogcomt.id'))
+#    # parent_comment = db.relationship('BlogComt', backref='replies', remote_side=[id])

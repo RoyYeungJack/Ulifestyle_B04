@@ -4,9 +4,9 @@
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 <ul class="nav navbar-nav">
-    {% for i in blogtypes %}
+    {% for i in blogtypes|sort(attribute='type') %}
         <li>
-        <a href="{{ url_for('Blog_Type_Page', blog_type = i.type) }}">{{ i.type }}</a>
+        <a href="{{ url_for('Blog_Type_Page', blog_type=i.type) }}">{{ i.type }}</a>
         </li>
     {% endfor %}
 </ul></div>
@@ -24,10 +24,9 @@
 </div>
 
 
-{% for comment in comments %}
+{% for a in comments %}
     <div class="comment">
-        <p>{{ comment.content }}</p>
-        <p>{{ comment.user.username }}</p>
+        <p>{{ a.content }}</p>
     </div>
 {% endfor %}
 

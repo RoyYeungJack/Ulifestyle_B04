@@ -6,7 +6,7 @@ from flask_babel import _, get_locale
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, UserPoints , MemberItem
+from app.models import User, Post, UserPoints , MemberItem , PicTest
 from app.email import send_password_reset_email
 
 
@@ -205,13 +205,15 @@ def member():
     user_points = UserPoints.query.filter_by(user_id=current_user.id).first()
     food_items = MemberItem.query.filter_by(category='food').all()
     travel_items = MemberItem.query.filter_by(category='travel').all()
+    pictests = PicTest.query.all()
     if user_points is not None:
-        return render_template('member.html.j2', points=user_points.points, food_items=food_items, travel_items=travel_items)
+        return render_template('member.html.j2', points=user_points.points, food_items=food_items, travel_items=travel_items, pictests=pictests)
     else:
         new_user_points = UserPoints(user_id=current_user.id, points=0)
         db.session.add(new_user_points)
         db.session.commit()
-        return render_template('member.html.j2', points=new_user_points.points, food_items=food_items, travel_items=travel_items)
+        return render_template('member.html.j2', points=new_user_points.points, food_items=food_items, travel_items=travel_items, pictests=pictests)
+    
     
 @app.route('/add_points', methods=['POST'])
 @login_required

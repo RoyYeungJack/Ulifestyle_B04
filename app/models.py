@@ -115,14 +115,11 @@ class MemberItem(db.Model):
     category = db.Column(db.String(64))  # 'food' or 'travel'
     points = db.Column(db.Integer)
 
+class PicTest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    imglink = db.Column(db.String(1000))
 
-
-# class hk_life(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-
-
-# class u_travel(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
 
 
     

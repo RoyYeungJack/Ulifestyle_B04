@@ -7,7 +7,7 @@
 {% endif %}
 
 
-<!-----------------------type-------------------------------->
+<!------------------------show type---------------------------------->
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 <ul class="nav navbar-nav">
@@ -19,16 +19,7 @@
 </ul></div>
 
 
-<div>
-{% for a in blogtypes %}
-    {% if a.id == blog_type_entry.id %}
-        <h5><a href="{{ url_for('Edit_Blog_Type', types_id = a.id) }}">Edit Type</a></h5>
-    {% endif %}
-{% endfor %}
-</div>
-
-
-<!------------------------show post------------------------------->
+<!------------------------show post---------------------------------->
 
 <div>
 {% for i in blog_posts %}
@@ -40,7 +31,6 @@
 {% endfor %}
 </div>
 
-<!------------------------show post------------------------------->
 
 
 

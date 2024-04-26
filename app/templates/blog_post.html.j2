@@ -1,6 +1,13 @@
 {% extends "base.html.j2" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
+{% if form %}
+    {{ wtf.quick_form(form) }}
+    <br/>
+{% endif %}
+
+
+<!------------------------show type-------------------------------->
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 <ul class="nav navbar-nav">
@@ -11,6 +18,8 @@
     {% endfor %}
 </ul></div>
 
+
+<!------------------------show post---------------------------------->
 
 <div>
     <h1>{{ postinf.title }}</h1>
@@ -24,15 +33,15 @@
 </div>
 
 
+<!-------------------------show comt--------------------------------->
+
 {% for a in comments %}
     <div class="comment">
         <p>{{ a.content }}</p>
     </div>
 {% endfor %}
 
-{% if form %}
-    {{ wtf.quick_form(form) }}
-    <br/>
-{% endif %}
+
+
 
 {% endblock %}

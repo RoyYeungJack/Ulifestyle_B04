@@ -10,12 +10,17 @@ db.drop_all()
 db.create_all()
 
 
-u1 = User(id=1,username='John', email='1@gmail.com')
+u1 = User(id=1,username='admin', email='admin@gmail.com')
 u2 = User(id=2,username='Mary', email='2@gmail.com')
 u3 = User(id=3,username='May', email='3@gmail.com')
-u1.set_password("1")
+u4 = User(id=4,username='John', email='1@gmail.com')
+u1.is_admin = True
+
+u1.set_password("admin")
 u2.set_password("2")
-db.session.add_all([u1,u2,u3])
+u3.set_password("3")
+u4.set_password("4")
+db.session.add_all([u1,u2,u3,u4])
 
 
 type1 = BlogType(id=1,type='Travel')

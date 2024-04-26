@@ -193,6 +193,16 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
+
+#-----------------------admin-------------------------------------
+
+@app.route('/admin')
+@login_required
+def Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
+    return render_template('admin.html.j2')
+
 #--------------------------jack base page----------------------------
 
 @app.route('/blog', methods=['GET', 'POST'])
@@ -233,13 +243,11 @@ def Add_Blog_Type():
         return redirect(url_for('Blog'))
     return render_template('blog.html.j2', form=form)
 
-
-@app.route('/blog/edittype/<int:types_id>', methods=['GET', 'POST'])
-def Edit_Blog_Type(types_id):
-    types = BlogType.query.get(types_id)
+@app.route('/admin/edit type', methods=['GET', 'POST'])
+def Edit_Blog_Type_Admin():
     form = EditBlogTypeForm()
-
     if form.validate_on_submit():
+        types = BlogType.query.get(form.type_id.data)
         if form.delete.data:
             subposts = BlogPost.query.filter_by(blogtype_id=types.id).all()
             for i in subposts:
@@ -254,8 +262,7 @@ def Edit_Blog_Type(types_id):
             db.session.commit()
             flash('Type updated successfully.')
         return redirect(url_for('Blog'))
-    return render_template('blog_type.html.j2', form=form, types=types)
-
+    return render_template('blog_type.html.j2', form=form)
 #-------------------------------------------------------------------------
 
 @app.route('/blog/addpost', methods=['GET', 'POST'])

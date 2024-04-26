@@ -7,6 +7,7 @@
 {% endif %}
 
 
+<!--------------------------show type---------------------------------->
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 <ul class="nav navbar-nav">
@@ -18,17 +19,20 @@
 </ul></div>
 
 
+<!------------------------show ramdon post-------------------------------->
+
 <div><ul>
     {% for x in random_posts %}
         <h1><a href="{{ url_for('Blog_Post_Page', post_id = x.id) }}">{{ x.title }}</a></h1>
         <p>{{ x.user.username }}</p>
         <p>{{ x.blogtype.type }}{{ x.blogtype_id }} </p>
     {% endfor %}
-
 </ul></div>
-
 </br></br></br>
-       
+
+
+
+
 <h2><a href="{{ url_for('Add_Blog_Post') }}">Add Post</a></h2>
 <h2><a href="{{ url_for('Add_Blog_Type') }}">Aadd Type</a></h2>
 

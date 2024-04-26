@@ -1,0 +1,23 @@
+@app.route('/blog/edittype/<int:types_id>', methods=['GET', 'POST'])
+def Edit_Blog_Type(types_id):
+    types = BlogType.query.get(types_id)
+    form = EditBlogTypeForm()
+
+    if form.validate_on_submit():
+        if form.delete.data:
+            subposts = BlogPost.query.filter_by(blogtype_id=types.id).all()
+            for i in subposts:
+                BlogComt.query.filter_by(blogpost_id=i.id).delete()
+
+            BlogPost.query.filter_by(blogtype_id=types.id).delete()
+            db.session.delete(types)
+            db.session.commit()
+            flash('Type deleted successfully.')
+        else:
+            types.type = form.updtype.data
+            db.session.commit()
+            flash('Type updated successfully.')
+        return redirect(url_for('Blog'))
+    return render_template('blog_type.html.j2', form=form, types=types)
+
+    # works but don't need 

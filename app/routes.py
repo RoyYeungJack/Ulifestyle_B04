@@ -90,7 +90,8 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        userq = User.query.order_by(User.id.desc()).first()
+        user = User(username=form.username.data, email=form.email.data,id=userq.id+1)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -273,6 +274,7 @@ def Edit_Blog_Type_Admin():
 #-------------------------------------------------------------------------
 
 @app.route('/blog/addpost', methods=['GET', 'POST'])
+@login_required
 def Add_Blog_Post():
     form = AddBlogPostForm()
     if form.validate_on_submit():
@@ -317,6 +319,7 @@ def Edit_Blog_Post(post_id):
 #-------------------------------------------------------------------------
 
 @app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
+@login_required
 def Add_Post_Comt(post_id):
     postinf = BlogPost.query.get(post_id) # P1(1)
     form = AddPostComtForm()

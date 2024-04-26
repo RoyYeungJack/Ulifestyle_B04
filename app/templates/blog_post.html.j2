@@ -13,7 +13,7 @@
 <ul class="nav navbar-nav">
     {% for i in blogtypes|sort(attribute='type') %}
         <li>
-        <a href="{{ url_for('Blog_Type_Page', blog_type=i.type) }}">{{ i.type }}
+        <a href="{{ url_for('Blog_Type_Page', blog_type=i.type) }}">{{ i.type }}</a>
         </li>
     {% endfor %}
 </ul></div>
@@ -24,31 +24,30 @@
 
 <div>
     <h1>{{ postinf.title }}</a></h1>
-    <h2>{{ postinf.description }}</h2>
+    <h3>{{ postinf.description }}</h3>
     <br>
     Author: {{ postinf.user.username }}<a href="{{ url_for('Edit_Blog_Post', post_id = postinf.id) }}"> edit</a>
 </div>
 
-<br><br>
+<br><br><br><br>
 
 <!-------------------------show comt--------------------------------->
 
 
-<h1>Comments</h1>
+<h2>Comments</h2>
 
 
 {% for a in comments %}
     {{ a.content }}
     <p>by:{{a.user.username}}</p>
-<br>
 {% endfor %}
 
 
-<br>
+<br><br>
 
-<div><h4>
+<h4>
     <a href="{{ url_for('Add_Post_Comt', post_id = postinf.id) }}">Add Comt</a>
-</h4></div>
+</h4>
 
 
 

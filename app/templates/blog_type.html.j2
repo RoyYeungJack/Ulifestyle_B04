@@ -18,15 +18,16 @@
     {% endfor %}
 </ul></div>
 
-
+<br><br>
 <!------------------------show post---------------------------------->
 
 <div>
 {% for i in blog_posts %}
     {% if i.blogtype_id == blog_type_entry.id %}
-        <h2><a href="{{ url_for('Blog_Post_Page', post_id = i.id) }}">{{ i.title }}</a></h2>
+        <h1><a href="{{ url_for('Blog_Post_Page', post_id = i.id) }}">{{ i.title }}</a></h1>
         <p>{{ i.description }}</p>
-        <p>{{ i.title }}</p>
+        <p>Author: {{ i.user.username }}</p>
+        <br><br>
     {% endif %}
 {% endfor %}
 </div>

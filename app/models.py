@@ -94,7 +94,8 @@ class Post(db.Model):
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
 
-# Yeung Yau Ki code
+
+#---------------------Yeung Yau Ki(Jack) Table--------------------------------------
 
 class BlogType(db.Model):
     __tablename__ = 'blogtype'
@@ -118,3 +119,5 @@ class BlogComt(db.Model):
     content = db.Column(db.String(200))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     blogpost_id = db.Column(db.Integer, db.ForeignKey('blogpost.id'))
+
+#---------------------------------------------------------------------------------

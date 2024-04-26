@@ -9,6 +9,7 @@ app_context.push()
 db.drop_all()
 db.create_all()
 
+#---------------------------User------------------------
 
 u1 = User(id=1,username='admin', email='admin@gmail.com')
 u2 = User(id=2,username='mary', email='2@gmail.com')
@@ -29,6 +30,8 @@ type3 = BlogType(id=3,type='Pet')
 db.session.add_all([type1,type2,type3])
 
 
+#-----------------------------Post----------------------------
+
 p1 = BlogPost(id=1,title='JP',user_id=1 ,blogtype_id=1,description='JP is quite good')
 p2 = BlogPost(id=2,title='TW',user_id=2 ,blogtype_id=1,description='TW is awsome')
 p3 = BlogPost(id=3, title='Apple', user_id=2, blogtype_id=2, description='Apple is very good')
@@ -37,6 +40,7 @@ p5 = BlogPost(id=5, title='Dog', user_id=3, blogtype_id=3, description='Dog is v
 p6 = BlogPost(id=6, title='Cat', user_id=3, blogtype_id=3, description='Cat is very good')
 db.session.add_all([p1,p2,p3,p4,p5,p6])
 
+#-----------------------------Comt-----------------------------
 
 c1 = BlogComt(id=1, content='sound good',user_id=2 ,blogpost_id=1)
 c2 = BlogComt(id=2, content='look good',user_id=3 ,blogpost_id=2)

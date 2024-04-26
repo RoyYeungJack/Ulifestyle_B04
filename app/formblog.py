@@ -6,7 +6,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
 from flask_babel import _, lazy_gettext as _l
 from app.models import BlogType, BlogPost, BlogComt
 
-
+#-----------Jack Blog Form
 #--------------------------TYPE------------------------------------------------------------
 
 class AddBlogTypeForm(FlaskForm):

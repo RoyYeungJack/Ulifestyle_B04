@@ -196,7 +196,7 @@ def unfollow(username):
     return redirect(url_for('user', username=username))
 
 
-#-----------------------admin-------------------------------------
+#----------------------------Admin Page-------------------------------------
 
 @app.route('/admin')
 @login_required
@@ -205,7 +205,8 @@ def Admin():
         return redirect(url_for('index'))
     return render_template('admin.html.j2')
 
-#--------------------------jack base page----------------------------
+
+#---------------------Yeung Yau Ki(Jack) Base Page--------------------------------------
 
 @app.route('/blog', methods=['GET', 'POST'])
 def Blog():
@@ -231,7 +232,7 @@ def Blog_Post_Page(post_id):
     comments = postinf.blog_comts
     return render_template('blog_post.html.j2', postinf=postinf, blogtypes=blogtypes, comments=comments)
 
-#--------------------------jack form--------------------
+#----------------------------------Jack Type Form----------------------------------------------
 
 @app.route('/admin/addtype', methods=['GET', 'POST'])
 @login_required
@@ -270,8 +271,8 @@ def Edit_Blog_Type_Admin():
             db.session.commit()
             flash('Type updated successfully.')
         return redirect(url_for('Blog'))
-    return render_template('blog_type.html.j2', form=form)
-#-------------------------------------------------------------------------
+
+#----------------------------------Jack Post Form----------------------------------------------
 
 @app.route('/blog/addpost', methods=['GET', 'POST'])
 @login_required
@@ -316,7 +317,7 @@ def Edit_Blog_Post(post_id):
     form.desc.data = post.description
     return render_template('blog.html.j2', form=form, post=post)
 
-#-------------------------------------------------------------------------
+#-----------------------------------Jack Comt Form----------------------------------------------
 
 @app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
 @login_required
@@ -351,3 +352,5 @@ def Del_Post_Comt_Admin():
             flash('Comt deleted successfully.')
             return redirect(url_for('Admin'))
     return render_template('blog.html.j2', form=form)
+
+#---------------------------Jack End-----------------------------------------

@@ -24,13 +24,6 @@
 
 </br></br></br></br></br>
        
-<div><ul>
-    {% for cmt in blogcomts %}
-        <p>{{ cmt.content}}</p>
-        <p>{{ cmt.user.username }}</p>
-        <p>parent {{ cmt.parent_comment_id}}</p>
-    {% endfor %}
-</ul></div>
 
 
 {% if form %}

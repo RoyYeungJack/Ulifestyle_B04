@@ -238,8 +238,14 @@ def Add_Blog_Type():
 def Edit_Blog_Type(types_id):
     types = BlogType.query.get(types_id)
     form = EditBlogTypeForm()
+
     if form.validate_on_submit():
         if form.delete.data:
+            subposts = BlogPost.query.filter_by(blogtype_id=types.id).all()
+            for i in subposts:
+                BlogComt.query.filter_by(blogpost_id=i.id).delete()
+
+            BlogPost.query.filter_by(blogtype_id=types.id).delete()
             db.session.delete(types)
             db.session.commit()
             flash('Type deleted successfully.')
@@ -255,17 +261,17 @@ def Edit_Blog_Type(types_id):
 
 @app.route('/blog/addpost', methods=['GET', 'POST'])
 def Add_Blog_Post():
+    allpost = BlogPost.query.count()
     form = AddBlogPostForm()
     if form.validate_on_submit():
-        lastgpost = BlogPost.query.order_by(BlogPost.id.desc()).first()
-        blogpost = BlogPost(id=lastgpost.id + 1,title=form.title.data, 
+        blogpost = BlogPost(id=allpost +1, title=form.title.data, 
                             description=form.dct.data, blogtype_id=form.type_id.data)
-        
         db.session.add(blogpost)
         db.session.commit()
+        typeid = BlogType.query.filter_by(id=form.type_id.data).first()
         flash(_('Finish'))
-        return redirect(url_for('Blog'))
-    return render_template('blog.html.j2', form=form)
+        return redirect(url_for('Blog_Type_Page',blog_type=typeid.type))
+    return render_template('blog.html.j2', form=form,allpost=allpost)
 
 
 @app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
@@ -304,5 +310,5 @@ def Add_Post_Comt(post_id):
         db.session.add(comt)
         db.session.commit()
         flash(_('Finish'))
-        return redirect(url_for('Blog'))
+        return redirect(url_for('Blog_Post_Page',post_id=post_id))
     return render_template('blog_post.html.j2', form=form,postinf=postinf)

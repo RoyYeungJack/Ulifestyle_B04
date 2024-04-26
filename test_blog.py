@@ -25,8 +25,8 @@ type4 = BlogType(id=3,type='Girl')
 db.session.add_all([type1,type2,type3])
 
 
-p1 = BlogPost(id=1,title='JP Tokyo Relax Place',user_id=1 ,blogtype_id=1,description='Vibrant cityscape, bustling streets, and rich cultural heritage, Tokyo is a captivating metropolis where tradition meets innovation.')
-p2 = BlogPost(id=2,title='TW TaiPai Fun Place',user_id=2 ,blogtype_id=1,description='Enchanting landscapes, delectable cuisine, and warm hospitality define Taiwan, an island nation blending tradition and modernity harmoniously.')
+p1 = BlogPost(id=1,title='JP',user_id=1 ,blogtype_id=1,description='JP is quite good')
+p2 = BlogPost(id=2,title='TW',user_id=2 ,blogtype_id=1,description='TW is awsome')
 p3 = BlogPost(id=3, title='Apple', user_id=2, blogtype_id=2, description='Apple is very good')
 p4 = BlogPost(id=4, title='Orange', user_id=2, blogtype_id=2, description='Orange is very good')
 p5 = BlogPost(id=5, title='Dog', user_id=3, blogtype_id=3, description='Dog is very good')

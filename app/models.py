@@ -104,7 +104,7 @@ class BlogType(db.Model):
 
 class BlogPost(db.Model):
     __tablename__ = 'blogpost'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     title = db.Column(db.String(50))
     description = db.Column(db.String(600))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

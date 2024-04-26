@@ -47,6 +47,16 @@ class EditBlogPostForm(FlaskForm):
 #--------------------------Comt---------------------------------------------------------
 
 class AddPostComtForm(FlaskForm):
-    content = TextAreaField('Description', validators=[Length(max=600), DataRequired()])
+    content = TextAreaField('Description', validators=[Length(max=100), DataRequired()])
     submit = SubmitField(('Submit'))
+
+
+class DelComtForm(FlaskForm):
+    comts = SelectField('Comments', choices=[], validators=[DataRequired()])
     delete = SubmitField('Delete')
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.comts.choices = [(blogcomt.id, blogcomt.content) for blogcomt in BlogComt.query.all()]
+        

@@ -9,8 +9,9 @@ from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Post, BlogPost, BlogType, BlogComt
-from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, EditBlogTypeForm, AddPostComtForm
-from sqlalchemy import func
+from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
+    EditBlogTypeForm, AddPostComtForm,DelComtForm
+
 
 
 @app.before_request
@@ -231,7 +232,7 @@ def Blog_Post_Page(post_id):
 
 #--------------------------jack form--------------------
 
-@app.route('/blog/addtype', methods=['GET', 'POST'])
+@app.route('/admin/addtype', methods=['GET', 'POST'])
 def Add_Blog_Type():
     form = AddBlogTypeForm()
     if form.validate_on_submit():
@@ -240,7 +241,7 @@ def Add_Blog_Type():
         db.session.add(blogtype)
         db.session.commit()
         flash(_('Finish Add Type'))
-        return redirect(url_for('Blog'))
+        return redirect(url_for('Admin'))
     return render_template('blog.html.j2', form=form)
 
 @app.route('/admin/edit type', methods=['GET', 'POST'])
@@ -307,14 +308,29 @@ def Edit_Blog_Post(post_id):
 @app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
 def Add_Post_Comt(post_id):
     postinf = BlogPost.query.get(post_id) # P1(1)
+    last_comt = BlogComt.query.order_by(BlogComt.id.desc()).first()
     form = AddPostComtForm()
 
     if form.validate_on_submit():
-        last_comt = BlogComt.query.order_by(BlogComt.id.desc()).first()
-        comt = BlogComt(id=last_comt.id+1,blogpost_id=post_id, content=form.content.data )
+        
+        comt = BlogComt(id=last_comt.id+1 ,blogpost_id=post_id, content=form.content.data )
         
         db.session.add(comt)
         db.session.commit()
         flash(_('Finish'))
         return redirect(url_for('Blog_Post_Page',post_id=post_id))
     return render_template('blog_post.html.j2', form=form,postinf=postinf)
+
+
+
+@app.route('/admin/editcomt', methods=['GET', 'POST'])
+def Del_Blog_Comt():
+    form = DelComtForm()
+    if form.validate_on_submit():
+        if form.delete.data:
+            delcomt = BlogComt.query.get(form.comts.data)
+            db.session.delete(delcomt)
+            db.session.commit()
+            flash('Comt deleted successfully.')
+            return redirect(url_for('Admin'))
+    return render_template('blog.html.j2', form=form)

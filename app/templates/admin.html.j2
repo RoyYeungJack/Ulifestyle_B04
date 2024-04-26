@@ -1,9 +1,11 @@
 {% extends "base.html.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
 {% if form %}
     {{ wtf.quick_form(form) }}
     <br/>
 {% endif %}
+
 
 <h1>Adminstrator Manage Page</h1>
 <br><br><br>
@@ -14,8 +16,9 @@
 <h3><a href="{{ url_for('Add_Blog_Type') }}">Add Type</a></h3>
 <br>
 <h3><a href="{{ url_for('Edit_Blog_Type_Admin') }}">Edit Type</a></h3>
-
-
+<br>
+<h3><a href="{{ url_for('Del_Blog_Comt') }}">Del Comts</a></h3>
+<br>
 
 
 

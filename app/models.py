@@ -97,7 +97,7 @@ class Post(db.Model):
 
 class BlogType(db.Model):
     __tablename__ = 'blogtype'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     type = db.Column(db.String(10))
     blog_posts = db.relationship('BlogPost', backref='blogtype')
 
@@ -113,7 +113,7 @@ class BlogPost(db.Model):
 
 class BlogComt(db.Model):
     __tablename__ = 'blogcomt'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     content = db.Column(db.String(200))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     blogpost_id = db.Column(db.Integer, db.ForeignKey('blogpost.id'))

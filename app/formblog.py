@@ -46,3 +46,4 @@ class EditBlogPostForm(FlaskForm):
 class AddPostComtForm(FlaskForm):
     content = TextAreaField('Description', validators=[Length(max=600), DataRequired()])
     submit = SubmitField(('Submit'))
+    delete = SubmitField('Delete')

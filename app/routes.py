@@ -233,7 +233,10 @@ def Blog_Post_Page(post_id):
 #--------------------------jack form--------------------
 
 @app.route('/admin/addtype', methods=['GET', 'POST'])
-def Add_Blog_Type():
+@login_required
+def Add_Blog_Type_Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
     form = AddBlogTypeForm()
     if form.validate_on_submit():
         last_type = BlogType.query.order_by(BlogType.id.desc()).first()
@@ -245,7 +248,10 @@ def Add_Blog_Type():
     return render_template('blog.html.j2', form=form)
 
 @app.route('/admin/edit type', methods=['GET', 'POST'])
+@login_required
 def Edit_Blog_Type_Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
     form = EditBlogTypeForm()
     if form.validate_on_submit():
         types = BlogType.query.get(form.type_id.data)
@@ -271,7 +277,7 @@ def Add_Blog_Post():
     form = AddBlogPostForm()
     if form.validate_on_submit():
         last_post = BlogPost.query.order_by(BlogPost.id.desc()).first()
-        blogpost = BlogPost(id=last_post.id+1, title=form.title.data, 
+        blogpost = BlogPost(id=last_post.id+1, title=form.title.data,user=current_user,
                             description=form.dct.data, blogtype_id=form.type_id.data)
         db.session.add(blogpost)
         db.session.commit()
@@ -282,8 +288,13 @@ def Add_Blog_Post():
 
 
 @app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
+@login_required
 def Edit_Blog_Post(post_id):
     post = BlogPost.query.get(post_id)
+    if post.user_id != current_user.id:
+        flash('Unauthorized access.')
+        return redirect(url_for('Blog'))
+
     form = EditBlogPostForm()
 
     if form.validate_on_submit():
@@ -308,12 +319,12 @@ def Edit_Blog_Post(post_id):
 @app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
 def Add_Post_Comt(post_id):
     postinf = BlogPost.query.get(post_id) # P1(1)
-    last_comt = BlogComt.query.order_by(BlogComt.id.desc()).first()
     form = AddPostComtForm()
 
     if form.validate_on_submit():
-        
-        comt = BlogComt(id=last_comt.id+1 ,blogpost_id=post_id, content=form.content.data )
+        last_comt = BlogComt.query.order_by(BlogComt.id.desc()).first()
+        comt = BlogComt(id=last_comt.id+1 ,blogpost_id=post_id, 
+                        content=form.content.data,user=current_user)
         
         db.session.add(comt)
         db.session.commit()
@@ -324,7 +335,10 @@ def Add_Post_Comt(post_id):
 
 
 @app.route('/admin/editcomt', methods=['GET', 'POST'])
-def Del_Blog_Comt():
+@login_required
+def Del_Post_Comt_Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
     form = DelComtForm()
     if form.validate_on_submit():
         if form.delete.data:

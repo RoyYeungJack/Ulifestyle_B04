@@ -11,9 +11,9 @@ db.create_all()
 
 
 u1 = User(id=1,username='admin', email='admin@gmail.com')
-u2 = User(id=2,username='Mary', email='2@gmail.com')
-u3 = User(id=3,username='May', email='3@gmail.com')
-u4 = User(id=4,username='John', email='1@gmail.com')
+u2 = User(id=2,username='mary', email='2@gmail.com')
+u3 = User(id=3,username='may', email='3@gmail.com')
+u4 = User(id=4,username='john', email='1@gmail.com')
 u1.is_admin = True
 
 u1.set_password("admin")
@@ -39,8 +39,12 @@ p6 = BlogPost(id=6, title='Cat', user_id=3, blogtype_id=3, description='Cat is v
 db.session.add_all([p1,p2,p3,p4,p5,p6])
 
 
-comt1 = BlogComt(id=1, content='sound good',user_id=1 ,blogpost_id=1)
-comt2 = BlogComt(id=2, content='oh no',user_id=2 ,blogpost_id=2)
-db.session.add_all([comt1,comt2])
+c1 = BlogComt(id=1, content='sound good',user_id=2 ,blogpost_id=1)
+c2 = BlogComt(id=2, content='look good',user_id=3 ,blogpost_id=2)
+c3 = BlogComt(id=3, content='not bad',user_id=4 ,blogpost_id=3)
+c4 = BlogComt(id=4, content='free ride is not good',user_id=2, blogpost_id=4)
+c5 = BlogComt(id=5, content='free ride is not good',user_id=3, blogpost_id=5)
+c6 = BlogComt(id=6, content='free ride is not good',user_id=4, blogpost_id=6)
+db.session.add_all([c1,c2,c3,c4,c5,c6])
 
 db.session.commit()

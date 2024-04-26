@@ -10,7 +10,7 @@ from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
 from app.models import User, Post, BlogPost, BlogType, BlogComt
 from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, EditBlogTypeForm, AddPostComtForm
-
+from sqlalchemy import func
 
 
 @app.before_request
@@ -224,9 +224,12 @@ def Blog_Post_Page(post_id):
 @app.route('/blog/addtype', methods=['GET', 'POST'])
 def Add_Blog_Type():
     form = AddBlogTypeForm()
+    max_id = db.session.query(func.max(BlogType.id)).scalar()
+    if max_id is None:
+        max_id = 0 
     if form.validate_on_submit():
         count_id = BlogType.query.count()
-        blogtype = BlogType(id=count_id + 1, type=form.addtype.data)
+        blogtype = BlogType(id=max_id + 1, type=form.addtype.data)
         db.session.add(blogtype)
         db.session.commit()
         flash(_('Finish Add Type'))
@@ -254,7 +257,6 @@ def Edit_Blog_Type(types_id):
             db.session.commit()
             flash('Type updated successfully.')
         return redirect(url_for('Blog'))
-    form.updtype.data = types.type
     return render_template('blog_type.html.j2', form=form, types=types)
 
 #-------------------------------------------------------------------------

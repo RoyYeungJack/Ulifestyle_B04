@@ -7,22 +7,24 @@ from flask_babel import _, lazy_gettext as _l
 from app.models import BlogType, BlogPost, BlogComt
 
 
-#--------------------------------------------------------------------------------------
+#--------------------------TYPE------------------------------------------------------------
+
 class AddBlogTypeForm(FlaskForm):
     addtype = TextAreaField(('Type Name'),validators=[Length(max=50), DataRequired()])
     submit = SubmitField(('Submit'))
 
 
 class EditBlogTypeForm(FlaskForm):
-    type_id = SelectField('Want To Edit', choices=[], validators=[DataRequired()])
-    updtype = TextAreaField(('Rename'),validators=[Length(max=50), DataRequired()])
+    type_id = SelectField('Type', choices=[], validators=[DataRequired()])
+    updtype = TextAreaField(('Rename/'),validators=[Length(max=50), DataRequired()])
     delete = SubmitField('Delete')
     submit = SubmitField('Submit')  
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.type_id.choices = [(blogtype.id, blogtype.type) for blogtype in BlogType.query.all()]
-#--------------------------------------------------------------------------------------
+
+#--------------------------POST-----------------------------------------------
 
 class AddBlogPostForm(FlaskForm):
     title = TextAreaField(('Tittle'),validators=[Length(max=50), DataRequired()])
@@ -41,7 +43,8 @@ class EditBlogPostForm(FlaskForm):
     desc = TextAreaField('Description', validators=[Length(max=600), DataRequired()])
     delete = SubmitField('Delete')
     submit = SubmitField('Update')
-#--------------------------------------------------------------------------------------
+
+#--------------------------Comt---------------------------------------------------------
 
 class AddPostComtForm(FlaskForm):
     content = TextAreaField('Description', validators=[Length(max=600), DataRequired()])

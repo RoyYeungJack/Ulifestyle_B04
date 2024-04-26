@@ -1,6 +1,11 @@
 {% extends "base.html.j2" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
+{% if form %}
+    {{ wtf.quick_form(form) }}
+    <br/>
+{% endif %}
+
 
 
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -22,15 +27,8 @@
 
 </ul></div>
 
-</br></br></br></br></br>
+</br></br></br>
        
-
-
-{% if form %}
-    {{ wtf.quick_form(form) }}
-    <br/>
-{% endif %}
-
 <h2><a href="{{ url_for('Add_Blog_Post') }}">Add Post</a></h2>
 <h2><a href="{{ url_for('Add_Blog_Type') }}">Aadd Type</a></h2>
 

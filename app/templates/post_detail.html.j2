@@ -31,5 +31,6 @@
         {% endset %}
         {{ _('%(username)s posted %(when)s',
             username=user_link, when=moment(post.timestamp).fromNow()) }}
+        <br />
     {% endfor %}
 {% endblock %}

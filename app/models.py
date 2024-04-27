@@ -209,8 +209,8 @@ class Tag(db.Model):
 class Post(db.Model): 
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    body = db.Column(db.Text)
+    title = db.Column(db.String(100), nullable=False)
+    body = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
@@ -222,7 +222,7 @@ class Post(db.Model):
 
 class PostComment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    content = db.Column(db.Text)
+    content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 

@@ -13,4 +13,18 @@
     <div class="row">
         <div class="col-md-4"><a href="{{ url_for('index', tag_name=post.tag.name) }}">{{ post.tag.name }}</a></div>
     </div>
+
+    <h2>Comments</h2>
+
+    {% for a in comments %}
+        {{ a.content }}
+        <p>by:{{a.user.username}}</p>
+    {% endfor %}
+
+
+    <br><br>
+
+    <h4>
+        <a href="{{ url_for('post_comment', post_id = post.id) }}">Add Comt</a>
+    </h4>
 {% endblock %}

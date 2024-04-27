@@ -4,7 +4,7 @@ from wtforms import HiddenField, StringField, PasswordField, BooleanField, Submi
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length
 from flask_babel import _, lazy_gettext as _l
-from app.models import User, City
+from app.models import PostComment, User, City
 from flask_wtf.file import FileField, FileAllowed
 
 
@@ -72,9 +72,12 @@ class PostForm(FlaskForm):
     city = SelectField('City', coerce=int, validators=[DataRequired()])
     city_id = HiddenField()
     tag = StringField('Tag', validators=[Length(max=50)])
-    image = FileField('Image', validators=[FileAllowed(['jpg', 'png'], 'Upload Image')])
     submit = SubmitField(_l('Submit'))
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
         self.city.choices = [(city.id, city.name) for city in City.query.all()]
+
+class AddCommentForm(FlaskForm):
+    content = TextAreaField('Comments', validators=[Length(max=100), DataRequired()])
+    submit = SubmitField(('Submit'))

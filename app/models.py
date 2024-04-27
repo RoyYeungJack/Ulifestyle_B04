@@ -30,6 +30,8 @@ class User(UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    post = db.relationship('Post', backref='user')
+    postcomment = db.relationship('PostComment', backref='user')
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -137,15 +139,16 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
     tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
-    images = db.relationship('PostImage', backref='image', lazy='dynamic')
+    blog_comts = db.relationship('PostComment', backref='post')
 
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
 
-class PostImage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    imagepath = db.Column(db.String(140))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+class PostComment(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    blogpost_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
 
 

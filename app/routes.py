@@ -4,9 +4,9 @@ from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
+from app.forms import AddCommentForm, LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm, PostForm
-from app.models import City, Tag, User, Post
+from app.models import City, PostComment, Tag, User, Post
 from app.email import send_password_reset_email
 
 
@@ -229,3 +229,20 @@ def post_detail(post_id):
         return render_template('404.html.j2')
 
     return render_template('post_detail.html.j2', post=post)
+
+@app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
+@login_required
+def post_comment(post_id):
+    postinf = PostComment.query.get(post_id) 
+    form = AddCommentForm()
+
+    if form.validate_on_submit():
+        last_comt = PostComment.query.order_by(PostComment.id.desc()).first()
+        comt = PostComment(id=last_comt.id+1 ,blogpost_id=post_id, 
+                        content=form.content.data,user=current_user)
+        
+        db.session.add(comt)
+        db.session.commit()
+        flash(_('Finish'))
+        return redirect(url_for('post_detail',post_id=post_id))
+    return render_template('post_detail.html.j2', form=form,postinf=postinf)

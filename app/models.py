@@ -96,7 +96,6 @@ class Post(db.Model):
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
 
-
 #---------------------Yeung Yau Ki(Jack) Table--------------------------------------
 class BlogType(db.Model):
     __tablename__ = 'blogtype'
@@ -171,3 +170,38 @@ class JapanPost(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     author = db.relationship('User', backref='japan_posts')
+#---------------------------------------------------------------------------------
+
+
+#---------------------Chen Cho Cham(Tony) tables-----------------------------------
+    
+class UserPoints(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    points = db.Column(db.Integer, default=100)
+    
+    user = db.relationship('User')
+
+    def add_points(user_id, points_to_add):
+        user_points = UserPoints.query.filter_by(user_id=user_id).first()
+        if user_points:
+            user_points.points += points_to_add
+            db.session.commit()
+    def subtract_points(user_id, points_to_subtract):
+        user_points = UserPoints.query.filter_by(user_id=user_id).first()
+        if user_points and user_points.points >= points_to_subtract:
+            user_points.points -= points_to_subtract
+            db.session.commit()
+
+class MemberItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    category = db.Column(db.String(64))  # 'food' or 'travel'
+    points = db.Column(db.Integer)
+
+class PicTest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    imglink = db.Column(db.String(1000))
+
+#---------------------------------------------------------------------------------

@@ -15,7 +15,6 @@ from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
 
 
 
-
 @app.before_request
 def before_request():
     if current_user.is_authenticated:

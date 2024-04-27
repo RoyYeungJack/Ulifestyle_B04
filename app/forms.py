@@ -5,6 +5,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, URL
 from flask_babel import _, lazy_gettext as _l
 from app.models import User
+from wtforms.validators import NumberRange
 
 
 class LoginForm(FlaskForm):
@@ -72,6 +73,6 @@ class JapanPostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])
-    rating = IntegerField('Rating', validators=[DataRequired()])
+    rating = IntegerField('Rating', validators=[NumberRange(min=1, max=5)])
     image_url = StringField('Image URL', validators=[DataRequired(), URL()])
     submit = SubmitField('Post')

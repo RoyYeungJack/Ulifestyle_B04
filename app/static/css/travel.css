@@ -1,0 +1,12 @@
+.country-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.country {
+    margin-right: 10px;
+}
+
+.cities {
+    position: absolute;
+}

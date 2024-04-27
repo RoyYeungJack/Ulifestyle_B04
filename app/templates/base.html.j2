@@ -37,7 +37,12 @@
                     <li>
                         <a href="{{ url_for('Admin') }}">{{ ('Admin') }}</a>
                     </li>
+                    <li>
+                        <a href="{{ url_for('travel') }}">Travel</a>
+                    </li>
                 </ul>
+
+
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
                         <li>
@@ -56,6 +61,8 @@
             </div>
         </div>
     </nav>
+
+
 {% endblock %}
 {% block content %}
     <div class="container">

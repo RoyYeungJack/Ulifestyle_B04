@@ -8,7 +8,7 @@ from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, BlogPost, BlogType, BlogComt
+from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt
 from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
     EditBlogTypeForm, AddPostComtForm,DelComtForm
 
@@ -62,6 +62,7 @@ def explore():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #locations = Location.query.all()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -74,9 +75,10 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-        return redirect(next_page)
+        return redirect(next_page) 
+    
     return render_template('login.html.j2', title=_('Sign In'), form=form)
-
+    #,locations=locations
 
 @app.route('/logout')
 def logout():
@@ -194,7 +196,6 @@ def unfollow(username):
     db.session.commit()
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
-
 
 #----------------------------Admin Page-------------------------------------
 
@@ -355,3 +356,90 @@ def Del_Post_Comt_Admin():
     return render_template('blog.html.j2', form=form)
 
 #---------------------------Jack End-----------------------------------------
+
+#---------------------------Mak Chun Kit(gordy) Part-------------------------
+    
+@app.route('/travel')
+def travel():
+    countries = Country.query.all()
+    return render_template('travel.html.j2', countries=countries)
+
+@app.route('/city/<city_name>')
+def city(city_name):
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first_or_404()
+    # Find the intro in the database
+    intro = CityIntroduction.query.filter_by(city_name=city_name).first()
+    return render_template('city.html.j2', city=city, intro=intro)
+
+@app.route('/update_introduction/<city_name>', methods=['POST'])
+def update_introduction(city_name):
+    # Get the new introduction from the form data
+    new_introduction = request.form.get('introduction')
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # If the city is found
+    if city:
+        # Update the city's introduction
+        city.introduction.introduction = new_introduction
+
+        # Commit the changes to the database
+        db.session.commit()
+
+    # Redirect the user back to the city page
+    return redirect(url_for('city', city_name=city_name))
+
+@app.route('/edit_city/<city_name>')
+def edit_city(city_name):
+    # Get the section to edit from the query parameters
+    section = request.args.get('section', 'introduction')
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # Render the edit page
+    return render_template('edit_city.html.j2', city=city, intro=city.introduction, section=section)
+
+
+@app.route('/update_city/<city_name>', methods=['POST'])
+def update_city(city_name):
+    # Get the new data from the form
+    new_introduction = request.form.get('introduction')
+    new_useful_links = request.form.get('useful_links')
+    new_emergency_help = request.form.get('emergency_help')
+    new_transportation_info = request.form.get('transportation_info')
+
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # If the city is found
+    if city:
+        # Check if the introduction has changed
+        if new_introduction and new_introduction != city.introduction.introduction:
+            # Update the city's introduction
+            city.introduction.introduction = new_introduction
+
+        # Check if the useful_links has changed
+        if new_useful_links and new_useful_links != city.introduction.useful_links:
+            # Update the city's useful_links
+            city.introduction.useful_links = new_useful_links
+        
+        # Check if the emergency_help has changed
+        if new_emergency_help and new_emergency_help != city.introduction.emergency_help:
+            # Update the city's emergency_help
+            city.introduction.emergency_help = new_emergency_help
+
+        # Check if the transportation_info has changed
+        if new_transportation_info and new_transportation_info != city.introduction.transportation_info:
+            # Update the city's transportation_info
+            city.introduction.transportation_info = new_transportation_info
+
+        # Commit the changes to the database
+        db.session.commit()
+
+    # Redirect the user back to the city page
+    return redirect(url_for('city', city_name=city_name))
+#---------------------------Gordy End-----------------------------------------

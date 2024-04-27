@@ -270,7 +270,7 @@ def Edit_Blog_Type_Admin():
             types.type = form.updtype.data
             db.session.commit()
             flash('Type updated successfully.')
-        return redirect(url_for('Blog'))
+        return redirect(url_for('Admin'))
     return render_template('blog.html.j2', form=form)
 
 #----------------------------------Jack Post Form----------------------------------------------

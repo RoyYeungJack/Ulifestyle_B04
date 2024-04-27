@@ -25,11 +25,14 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    is_admin = db.Column(db.Boolean(), default=False)
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    blog_postss = db.relationship('BlogPost', backref='user')
+    blog_comtss = db.relationship('BlogComt', backref='user')
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -82,6 +85,7 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
+  
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -92,15 +96,35 @@ class Post(db.Model):
     def __repr__(self) -> str:
         return f'<Post {self.body}>'
 
-# Yeung Yau Ki code
 
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True)
+#---------------------Yeung Yau Ki(Jack) Table--------------------------------------
+class BlogType(db.Model):
+    __tablename__ = 'blogtype'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    type = db.Column(db.String(10))
+    blog_posts = db.relationship('BlogPost', backref='blogtype')
 
-    def __repr__(self) -> str:
-        return f'<Category {self.name}>'
-    
+
+class BlogPost(db.Model):
+    __tablename__ = 'blogpost'
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    title = db.Column(db.String(50))
+    description = db.Column(db.String(600))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    blogtype_id = db.Column(db.Integer, db.ForeignKey('blogtype.id'))
+    blog_comts = db.relationship('BlogComt', backref='blogpost')
+
+class BlogComt(db.Model):
+    __tablename__ = 'blogcomt'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.String(200))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    blogpost_id = db.Column(db.Integer, db.ForeignKey('blogpost.id'))
+
+#---------------------------------------------------------------------------------
+
+#---------------------Mak Chun Kit(Gordy) Table--------------------------------------
+  
 
 class Country(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -134,3 +158,4 @@ class CityIntroduction(db.Model):
 
     def __repr__(self):
         return f'<CityIntroduction {self.city_name}>'
+

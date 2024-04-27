@@ -1,18 +1,23 @@
+# Jack references
+pip install -r requirements.txt
+flask db upgrade
 
-# How to create translation
-Run following commands
-```
-cd app/
-mkdir translations
-pybabel extract -F babel.cfg -k lazy_gettext -o translations/messages.pot .
-pybabel init -i translations/messages.pot -d translations -l en
-pybabel init -i translations/messages.pot -d translations -l es
-pybabel init -i translations/messages.pot -d translations -l zh
-pybabel compile -d translations
-```
+set FLASK_APP=microblog.py
+export FLASK_APP=microblog.py
+flask shell
+users = User.query.all()
 
-# How to update translation
-```
-cd app/
-pybabel update -i translations/messages.pot -d translations
-```
+db.session.add_all([bg1,bg2])
+db.session.delete(xx)
+db.engine.execute("DROP TABLE blogger CASCADE")
+
+
+
+flask --debug run --host=0.0.0.0
+
+
+
+selected_type_id = form.type_id.data
+selected_type = BlogType.query.get(selected_type_id)
+description = selected_type.description
+----------------------------------

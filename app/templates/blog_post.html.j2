@@ -1,0 +1,54 @@
+{% extends "base.html.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+{% if form %}
+    {{ wtf.quick_form(form) }}
+    <br/>
+{% endif %}
+
+
+<!------------------------show type-------------------------------->
+
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<ul class="nav navbar-nav">
+    {% for i in blogtypes|sort(attribute='type') %}
+        <li>
+        <a href="{{ url_for('Blog_Type_Page', blog_type=i.type) }}">{{ i.type }}</a>
+        </li>
+    {% endfor %}
+</ul></div>
+
+<br><br>
+
+<!------------------------show post---------------------------------->
+
+<div>
+    <h1>{{ postinf.title }}</a></h1>
+    <h3>{{ postinf.description }}</h3>
+    <br>
+    Author: {{ postinf.user.username }}<a href="{{ url_for('Edit_Blog_Post', post_id = postinf.id) }}"> edit</a>
+</div>
+
+<br><br><br><br>
+
+<!-------------------------show comt--------------------------------->
+
+
+<h2>Comments</h2>
+
+
+{% for a in comments %}
+    {{ a.content }}
+    <p>by:{{a.user.username}}</p>
+{% endfor %}
+
+
+<br><br>
+
+<h4>
+    <a href="{{ url_for('Add_Post_Comt', post_id = postinf.id) }}">Add Comt</a>
+</h4>
+
+
+
+{% endblock %}

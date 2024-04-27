@@ -1,5 +1,6 @@
 from app import db, app
-from app.models import User, Post, Category, Country, City, CityIntroduction
+from app.models import User, Post, Country, City, CityIntroduction
+
 
 
 app_context = app.app_context()
@@ -20,13 +21,6 @@ p1 = Post(body='my first post!', author=u1)
 p2 = Post(body='my first post!', author=u2)
 db.session.add(p1)
 db.session.add(p2)
-
-# Category add test
-c1 = Category(name='HK')
-c2 = Category(name='Travel')
-db.session.add(c1)
-db.session.add(c2)
-#db.create_all()
 
 #Add the Column to the Country Table
 taiwan = Country(name='Taiwan')

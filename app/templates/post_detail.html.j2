@@ -1,0 +1,35 @@
+{% extends "base.html.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-primary">Edit this post</a>
+    <br />
+    <form action="{{ url_for('dl_post', post_id=post.id) }}" method="POST">
+    <button type="submit" class="btn btn-danger">Delete This Post</button>
+    </form>
+    <h1>{{ post.title }}</h1>
+    <div class="row">
+        <div class="col-md-4">Click here to check <a href="{{ url_for('city', city_name=post.city.name) }}">{{ post.city.name }}</a></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class>{{ post.body }}</div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">Tag: <a href="{{ url_for('posts_by_tag', tag_id=post.tag.id) }}">{{ post.tag.name }}</a></div>
+    </div>
+
+    <h2>Comments</h2> <a href="{{ url_for('add_comment', post_id = post.id) }}">Add Comment</a>
+    <br />
+    <br />
+    <br />
+    {% for comment in comments %}
+        {{ comment.content }}
+        <br />
+        {% set user_link %}
+            <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
+        {% endset %}
+        {{ _('%(username)s posted %(when)s',
+            username=user_link, when=moment(post.timestamp).fromNow()) }}
+    {% endfor %}
+{% endblock %}

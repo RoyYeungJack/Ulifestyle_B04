@@ -1,5 +1,5 @@
 from app import db, app
-from app.models import User, BlogType, BlogPost, BlogComt, Country, City, CityIntroduction
+from app.models import Post, PostComment, Tag, User, BlogType, BlogPost, BlogComt, Country, City, CityIntroduction
 
 app_context = app.app_context()
 app_context.push()
@@ -30,7 +30,7 @@ type3 = BlogType(id=3,type='Pet')
 db.session.add_all([type1,type2,type3])
 
 
-#-----------------------------Post----------------------------
+#-----------------------------BlogPost----------------------------
 
 p1 = BlogPost(id=1,title='JP',user_id=2 ,blogtype_id=1,description='JP is quite good')
 p2 = BlogPost(id=2,title='TW',user_id=3 ,blogtype_id=1,description='TW is awsome')
@@ -40,7 +40,7 @@ p5 = BlogPost(id=5, title='Dog', user_id=3, blogtype_id=3, description='Dog is v
 p6 = BlogPost(id=6, title='Cat', user_id=4, blogtype_id=3, description='Cat is very good')
 db.session.add_all([p1,p2,p3,p4,p5,p6])
 
-#-----------------------------Comt-----------------------------
+#-----------------------------BlogComt-----------------------------
 
 c1 = BlogComt(id=1, content='sound good',user_id=2 ,blogpost_id=1)
 c2 = BlogComt(id=2, content='look good',user_id=3 ,blogpost_id=2)
@@ -61,10 +61,10 @@ taiwan = Country(name='Taiwan')
 japan = Country(name='Japan')
 
 #Add the Colum to the City Table
-taipei = City(name='Taipei', country=taiwan)
-taichung = City(name='Taichung', country=taiwan)
-tokyo = City(name='Tokyo', country=japan)
-kyoto = City(name='Kyoto', country=japan)
+taipei = City(id=1, name='Taipei', country=taiwan)
+taichung = City(id=2, name='Taichung', country=taiwan)
+tokyo = City(id=3, name='Tokyo', country=japan)
+kyoto = City(id=4, name='Kyoto', country=japan)
 
 # Session add all of the Country and City
 db.session.add_all([taiwan, japan, tokyo, kyoto, taipei, taichung])
@@ -88,5 +88,24 @@ kyoto_intro = CityIntroduction(
 )
 
 db.session.add_all([tokyo_intro,kyoto_intro])
+
+db.session.commit()
+
+# NewPost Mandy
+
+t1 = Tag(id=1, name="Travel")
+t2 = Tag(id=2, name="Gourmet")
+db.session.add(t1)
+db.session.add(t2)
+
+b1 = Post(title="日本花季｜日本一年四季賞花時間表（附賞花景點推介） 4月櫻花、紫藤、粉蝶花｜6月繡球花｜7月8月薰衣草、向日葵 ", body='日本四季分明，一年365日春夏秋冬每個季節都有不少花卉植物可以欣賞，絕對不只有櫻花及紅葉！以下為大家整理日本一年四季的花季（12個月）、花期以及日本賞花景點推介，了解各種花卉開花時期。', city_id = 1, tag_id = 1, author=u1)
+b2 = Post(title="福岡酒店推介｜博多The Lively HAKATA 三大看點！高質雙人房每晚人均$211起", body='Lively Hotels旗艦品牌「The Lively」一直主打富設計感、創新活力的精神酒店內外都裝修到極致豪華，位於城市區域的選址更加結合了該地的特色和人文精神。以下為你推介福岡的The Lively HAKATA，住宿雖然親民，但設施服務完全可媲美一般的商務酒店！最近計劃到九州遊覽的旅客，建議留意一下酒店詳情，儘快預訂！', city_id = 2, tag_id = 2, author=u2)
+db.session.add(b1)
+db.session.add(b2)
+
+pc1 = PostComment(id=1, content='test',user_id=2 ,post_id=1)
+pc2 = PostComment(id=2, content='test2',user_id=3 ,post_id=2)
+db.session.add(pc1)
+db.session.add(pc2)
 
 db.session.commit()

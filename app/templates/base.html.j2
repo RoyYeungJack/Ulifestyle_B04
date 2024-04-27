@@ -29,7 +29,7 @@
                         <a href="{{ url_for('index') }}">{{ _('Home') }}</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('explore') }}">{{ _('Explore') }}</a>
+                        <a href="{{ url_for('posts') }}">{{ _('Post') }}</a>
                     </li>
                     <li>
                         <a href="{{ url_for('Blog') }}">{{ ('BLOG') }}</a>
@@ -46,10 +46,13 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
                         <li>
+                            <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
+                        </li>
+                        <li>
                             <a href="{{ url_for('loginjump') }}">{{ _('Member') }}</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
+                            <a href="{{ url_for('index') }}">{{ _('index') }}</a>
                         </li>
                     {% else %}
                         <li>

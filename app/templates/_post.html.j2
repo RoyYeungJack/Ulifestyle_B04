@@ -1,18 +1,25 @@
 <table class="table table-hover">
     <tr>
-        <td width="70px">
-            <a href="{{ url_for('user', username=post.author.username) }}">
-                <img src="{{ post.author.avatar(70) }}"/>
-            </a>
-        </td>
-        <td>
+        <td style="width:20%">
             {% set user_link %}
             <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
-        {% endset %}
-        {{ _('%(username)s said %(when)s',
-        username=user_link, when=moment(post.timestamp).fromNow()) }}
-        <br/>
-        {{ post.body }}
-    </td>
-</tr>
+            {% endset %}
+            {{ _('%(username)s posted <br/> %(when)s',
+            username=user_link, when=moment(post.timestamp).fromNow()) }}
+        </td>
+        <td style="width:40%">
+            <a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title[:40] }}{{ '...' if post.title|length > 20 else '' }}</a>
+        </td>
+        <td style="width:20%">
+            <a href="{{ url_for('city', city_name=post.city.name) }}">{{ post.city.name }}</a>
+        </td>
+        <td style="width:20%">
+            <a href="{{ url_for('posts_by_tag', tag_id=post.tag.id) }}">{{ post.tag.name }}</a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            {{ post.body }}
+        </td>
+    </tr>
 </table>

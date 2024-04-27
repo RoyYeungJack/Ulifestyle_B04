@@ -1,0 +1,120 @@
+{% extends "base.html.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Page</title>
+</head>
+
+
+
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;">
+<header style="background-color: #333; color: white; padding: 10px 0; text-align: center;">
+<h1 style="margin: 0;">Welcome, {{ current_user.username }}!</h1>
+</header>
+
+
+
+<div style="padding: 20px;">
+<div class="points-display" style="position: absolute; right: 0; padding: 10px; background-color: #fff; border: 1px solid #ccc; border-radius: 5px;">
+<p style="margin: 0;">Points: {{ points }}</p>
+    
+
+
+<form action="{{ url_for('add_points') }}" method="post">
+<input type="hidden" name="user_id" value="{{ current_user.id }}">
+<input type="text" name="points" pattern="\d*" maxlength="4" value=10 style="width: 50px;">
+<button type="submit">+</button>
+</form>
+
+
+
+<form action="{{ url_for('subtract_points') }}" method="post">
+<input type="hidden" name="user_id" value="{{ current_user.id }}">
+<input type="text" name="points" pattern="\d*" maxlength="4" value=10 style="width: 50px;">
+<button type="submit">-</button>
+</form>
+</div>
+
+
+
+<div class="category-container" style="margin-bottom: 2rem;">
+<h2 style="font-size: 24px; color: #333;">Food</h2>
+{% for item in food_items %}
+<div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+<h4 style="color: #333;">{{ item.name }}</h4>
+<p style="color: #666;">{{ item.points }} points</p>
+<form action="{{ url_for('purchase_item') }}" method="post">
+<input type="hidden" name="user_id" value="{{ current_user.id }}">
+<input type="hidden" name="item_id" value="{{ item.id }}">
+<button type="submit" style="background-color: #4CAF50; /* Green */
+               border: none;
+               color: white;
+               padding: 15px 32px;
+               text-align: center;
+               text-decoration: none;
+               display: inline-block;
+               font-size: 16px;
+               margin: 4px 2px;
+               cursor: pointer;
+               border-radius: 4px;
+               transition-duration: 0.4s;"
+        onmouseover="this.style.backgroundColor='#45a049'"
+        onmouseout="this.style.backgroundColor='#4CAF50'">Purchase</button>
+</form>
+{% endfor %}
+</div>
+
+
+
+<div class="category-container" style="margin-bottom: 2rem;">
+<h2 style="font-size: 24px; color: #333;">Travel</h2>
+{% for item in travel_items %}
+<div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+<h4 style="color: #333;">{{ item.name }}</h4>
+<p style="color: #666;">{{ item.points }} points</p>
+<form action="{{ url_for('purchase_item') }}" method="post">
+<input type="hidden" name="user_id" value="{{ current_user.id }}">
+<input type="hidden" name="item_id" value="{{ item.id }}">
+<button type="submit" style="background-color: #4CAF50; /* Green */
+               border: none;
+               color: white;
+               padding: 15px 32px;
+               text-align: center;
+               text-decoration: none;
+               display: inline-block;
+               font-size: 16px;
+               margin: 4px 2px;
+               cursor: pointer;
+               border-radius: 4px;
+               transition-duration: 0.4s;"
+        onmouseover="this.style.backgroundColor='#45a049'"
+        onmouseout="this.style.backgroundColor='#4CAF50'">Purchase</button>
+</form>
+{% endfor %}
+</div>
+</div>
+
+
+
+<footer style="background-color: #333; color: white; padding: 20px; text-align: center;">
+<div style="display: flex; justify-content: space-around; align-items: center;">
+{% for pictest in pictests %}
+<a href="https://www.coca-cola.com/">
+<img src="{{ pictest.imglink }}" width="1050" height="auto">
+</a>
+{% endfor %}
+</div>
+</div>
+<p style="margin-top: 20px;">&copy; Ulifestyle. All rights reserved.</p>
+</footer>
+</body>
+</html>
+
+
+
+{% endblock %}

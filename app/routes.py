@@ -3,16 +3,16 @@ import random
 from flask import render_template, flash, abort, redirect, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
-from werkzeug.utils import secure_filename
 from flask_babel import _, get_locale
 from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
-    ResetPasswordRequestForm, ResetPasswordForm, JapanPostForm
-from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt, JapanPost
+    ResetPasswordRequestForm, ResetPasswordForm
+from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt, JapanPost, \
+UserPoints , MemberItem , PicTest
 from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
     EditBlogTypeForm, AddPostComtForm,DelComtForm
-import os
+
 
 
 
@@ -198,6 +198,7 @@ def unfollow(username):
     db.session.commit()
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
+
 
 #----------------------------Admin Page-------------------------------------
 
@@ -494,3 +495,61 @@ def delete_post(post_id):
 def view_japan_post(post_id):
     post = JapanPost.query.get_or_404(post_id)
     return render_template('view_japan_post.html.j2', post=post)
+
+#---------------------------Gordy End-----------------------------------------
+
+#------------------------Chen Cho Cham Tony part------------------------------
+
+@app.route('/member',methods=['GET', 'POST'])
+@login_required
+def member():
+    user_points = UserPoints.query.filter_by(user_id=current_user.id).first()
+    food_items = MemberItem.query.filter_by(category='food').all()
+    travel_items = MemberItem.query.filter_by(category='travel').all()
+    pictests = PicTest.query.filter_by(name = "cola").all()
+    if user_points is not None:
+        return render_template('member.html.j2', points=user_points.points, food_items=food_items, travel_items=travel_items, pictests=pictests)
+    else:
+        new_user_points = UserPoints(user_id=current_user.id, points=0)
+        db.session.add(new_user_points)
+        db.session.commit()
+        return render_template('member.html.j2', points=new_user_points.points, food_items=food_items, travel_items=travel_items, pictests=pictests)
+    
+    
+@app.route('/add_points', methods=['GET', 'POST'])
+@login_required
+def add_points():
+    user_id = request.form.get('user_id')
+    points = int(request.form.get('points'))
+    UserPoints.add_points(user_id, points)
+    return redirect(url_for('member'))
+
+@app.route('/subtract_points', methods=['GET', 'POST'])
+@login_required
+def subtract_points():
+    user_id = request.form.get('user_id')
+    points = int(request.form.get('points'))
+    UserPoints.subtract_points(user_id, points)
+    return redirect(url_for('member'))
+
+@app.route('/loginjump', methods=['GET', 'POST'])
+def loginjump():
+    return render_template('loginjump.html.j2')
+
+@app.route('/purchase_item', methods=['GET','POST'])
+@login_required
+def purchase_item():
+    user_id = request.form.get('user_id')
+    item_id = request.form.get('item_id')
+    item = MemberItem.query.get(item_id)
+    user_points = UserPoints.query.filter_by(user_id=user_id).first()
+    if user_points.points >= item.points:
+        user_points.points -= item.points
+        db.session.commit()
+        flash('You have successfully purchased the item!', 'success')
+    else:
+        flash('You do not have enough points to purchase this item.', 'error')
+    return redirect(url_for('member'))
+
+  
+ #------------------------end part-----------------------------------------

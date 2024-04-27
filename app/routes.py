@@ -12,7 +12,6 @@ from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
 from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt, JapanPost
 from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
     EditBlogTypeForm, AddPostComtForm,DelComtForm
-import os
 
 
 

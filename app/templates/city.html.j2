@@ -18,8 +18,10 @@
     <div class="content-box" id="emergency_help" style="display: none;">{{ intro.emergency_help }}</div>
     <div class="content-box" id="transportation_info" style="display: none;">{{ intro.transportation_info }}</div>
 
-    <a id="edit-link" class="button" href="{{ url_for('edit_city', city_name=city.name, section='introduction') }}">Edit</a>
-    <button class="button" onclick="window.location.href='{{ url_for('travel', travel=travel) }}'">Cancel</button>
+    {% if current_user.is_authenticated and current_user.is_admin %}
+        <a id="edit-link" class="button" href="{{ url_for('edit_city', city_name=city.name, section='introduction') }}">Edit</a>
+    {% endif %}
+    <button class="button" onclick="window.location.href='{{ url_for('travel', travel=travel) }}'">Back</button>
 
 <script>
     var currentSection = 'introduction';

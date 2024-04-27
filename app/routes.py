@@ -1,6 +1,6 @@
 from datetime import datetime
 import random
-from flask import render_template, flash, redirect, url_for, request, g
+from flask import render_template, flash, abort, redirect, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
@@ -8,7 +8,7 @@ from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt, \
+from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt, JapanPost, \
 UserPoints , MemberItem , PicTest
 from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
     EditBlogTypeForm, AddPostComtForm,DelComtForm
@@ -395,12 +395,16 @@ def update_introduction(city_name):
     return redirect(url_for('city', city_name=city_name))
 
 @app.route('/edit_city/<city_name>')
+@login_required
 def edit_city(city_name):
+    if not current_user.is_admin:
+        abort(404)
+
     # Get the section to edit from the query parameters
     section = request.args.get('section', 'introduction')
 
     # Find the city in the database
-    city = City.query.filter_by(name=city_name).first()
+    city = City.query.filter_by(name=city_name).first_or_404()
 
     # Render the edit page
     return render_template('edit_city.html.j2', city=city, intro=city.introduction, section=section)
@@ -445,9 +449,56 @@ def update_city(city_name):
 
     # Redirect the user back to the city page
     return redirect(url_for('city', city_name=city_name))
+
+@app.route('/guide_for_japan', methods=['GET', 'POST'])
+def guide_for_japan():
+    # Retrieve all posts for display
+    posts = JapanPost.query.order_by(JapanPost.id.desc()).all()
+
+    # Check if the user is logged in
+    if current_user.is_authenticated:
+        form = JapanPostForm()
+        # If the form submission is valid, process the post save.
+        if form.validate_on_submit():
+            new_post = JapanPost(
+                # Ensure the author is the current logged-in user.
+                author_id=current_user.id,  
+                title=form.title.data,
+                content=form.content.data,
+                location=form.location.data,
+                rating=form.rating.data,
+                image_url=form.image_url.data
+            )
+            db.session.add(new_post)
+            db.session.commit()
+            flash('Post has been created successfully!')
+            return redirect(url_for('guide_for_japan'))
+        # If the user is logged in, display the form and posts.
+        return render_template('guide_for_japan.html.j2', form=form, posts=posts)
+    else:
+        # If the user is not logged in, do not display the form, only display the posts.
+        return render_template('guide_for_japan.html.j2', posts=posts)
+
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+@login_required
+def delete_post(post_id):
+    if not current_user.is_admin:
+        abort(404)
+    post = JapanPost.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Post has been deleted successfully.', 'success')
+    return redirect(url_for('guide_for_japan'))
+
+
+@app.route('/view_japan_post/<int:post_id>')
+def view_japan_post(post_id):
+    post = JapanPost.query.get_or_404(post_id)
+    return render_template('view_japan_post.html.j2', post=post)
+
 #---------------------------Gordy End-----------------------------------------
 
-#------------------------Chen Cho Cham Tony part-----------------------------------------
+#------------------------Chen Cho Cham Tony part------------------------------
 
 @app.route('/member',methods=['GET', 'POST'])
 @login_required

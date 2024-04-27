@@ -122,7 +122,7 @@ class BlogComt(db.Model):
 
 #---------------------------------------------------------------------------------
 
-#---------------------Mak Chun Kit(Gordy) Table--------------------------------------
+#---------------------Mak Chun Kit(Gordy) Table-----------------------------------
   
 
 class Country(db.Model):
@@ -158,6 +158,21 @@ class CityIntroduction(db.Model):
     def __repr__(self):
         return f'<CityIntroduction {self.city_name}>'
 
+class JapanPost(db.Model):
+    __tablename__ = 'japan_posts'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    title = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    image_url = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    author = db.relationship('User', backref='japan_posts')
+#---------------------------------------------------------------------------------
+
+
 #---------------------Chen Cho Cham(Tony) tables-----------------------------------
     
 class UserPoints(db.Model):
@@ -190,6 +205,3 @@ class PicTest(db.Model):
     imglink = db.Column(db.String(1000))
 
 #---------------------------------------------------------------------------------
-
-    
-

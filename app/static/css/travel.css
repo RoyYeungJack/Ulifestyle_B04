@@ -10,3 +10,24 @@
 .cities {
     position: absolute;
 }
+
+/* Add a common style for all buttons and city links */
+.button, .city-link {
+    background-color: #ccc;
+    color: black;
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.button:hover, .city-link:hover {
+    background-color: #ddd;
+}
+
+.button:active, .city-link:active {
+    background-color: #aaa;
+}

@@ -21,3 +21,6 @@ selected_type_id = form.type_id.data
 selected_type = BlogType.query.get(selected_type_id)
 description = selected_type.description
 ----------------------------------
+
+#USE the test_blog.py to test the db
+#DON'T USE THE test_data.py or tests.py

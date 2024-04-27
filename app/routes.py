@@ -1,13 +1,19 @@
 from datetime import datetime
+import random
 from flask import render_template, flash, redirect, url_for, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import app, db
+from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User, Post, UserPoints , MemberItem , PicTest
-from app.email import send_password_reset_email
+from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt, \
+UserPoints , MemberItem , PicTest
+from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
+    EditBlogTypeForm, AddPostComtForm,DelComtForm
+
+
 
 
 @app.before_request
@@ -58,6 +64,7 @@ def explore():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #locations = Location.query.all()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -70,9 +77,10 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-        return redirect(next_page)
+        return redirect(next_page) 
+    
     return render_template('login.html.j2', title=_('Sign In'), form=form)
-
+    #,locations=locations
 
 @app.route('/logout')
 def logout():
@@ -86,7 +94,8 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        userq = User.query.order_by(User.id.desc()).first()
+        user = User(username=form.username.data, email=form.email.data,id=userq.id+1)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -190,6 +199,256 @@ def unfollow(username):
     flash(_('You are not following %(username)s.', username=username))
     return redirect(url_for('user', username=username))
 
+
+#----------------------------Admin Page-------------------------------------
+
+@app.route('/admin')
+@login_required
+def Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
+    return render_template('admin.html.j2')
+
+
+#---------------------Yeung Yau Ki(Jack) Base Page--------------------------------------
+
+@app.route('/blog', methods=['GET', 'POST'])
+def Blog():
+    blogposts = BlogPost.query.all()
+    blogtypes = BlogType.query.all()
+    blogcomts = BlogComt.query.all()
+    random.shuffle(blogposts)
+    random_posts = blogposts[:5]
+    return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes, blogcomts=blogcomts,random_posts=random_posts)
+
+
+@app.route('/blog/<blog_type>')
+def Blog_Type_Page(blog_type):
+    blogtypes = BlogType.query.all()
+    blog_type_entry = BlogType.query.filter_by(type=blog_type).first() #BlogType.type(Pet) Object
+    blog_posts = BlogPost.query.filter_by(blogtype_id=blog_type_entry.id).all() #BP.btid=Pet.id(P1,P2) Object
+    return render_template('blog_type.html.j2', blogtypes=blogtypes, blog_type_entry=blog_type_entry, blog_posts=blog_posts)
+
+@app.route('/blog/post/<int:post_id>')
+def Blog_Post_Page(post_id):
+    blogtypes = BlogType.query.all()
+    postinf = BlogPost.query.get(post_id)
+    comments = postinf.blog_comts
+    return render_template('blog_post.html.j2', postinf=postinf, blogtypes=blogtypes, comments=comments)
+
+#----------------------------------Jack Type Form----------------------------------------------
+
+@app.route('/admin/addtype', methods=['GET', 'POST'])
+@login_required
+def Add_Blog_Type_Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
+    form = AddBlogTypeForm()
+    if form.validate_on_submit():
+        last_type = BlogType.query.order_by(BlogType.id.desc()).first()
+        blogtype = BlogType(id=last_type.id +1 , type=form.addtype.data)
+        db.session.add(blogtype)
+        db.session.commit()
+        flash(_('Finish Add Type'))
+        return redirect(url_for('Admin'))
+    return render_template('blog.html.j2', form=form)
+
+@app.route('/admin/edittype', methods=['GET', 'POST'])
+@login_required
+def Edit_Blog_Type_Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
+    form = EditBlogTypeForm()
+    if form.validate_on_submit():
+        types = BlogType.query.get(form.type_id.data)
+        if form.delete.data:
+            subposts = BlogPost.query.filter_by(blogtype_id=types.id).all()
+            for i in subposts:
+                BlogComt.query.filter_by(blogpost_id=i.id).delete()
+
+            BlogPost.query.filter_by(blogtype_id=types.id).delete()
+            db.session.delete(types)
+            db.session.commit()
+            flash('Type deleted successfully.')
+        else:
+            types.type = form.updtype.data
+            db.session.commit()
+            flash('Type updated successfully.')
+        return redirect(url_for('Admin'))
+    return render_template('blog.html.j2', form=form)
+
+#----------------------------------Jack Post Form----------------------------------------------
+
+@app.route('/blog/addpost', methods=['GET', 'POST'])
+@login_required
+def Add_Blog_Post():
+    form = AddBlogPostForm()
+    if form.validate_on_submit():
+        last_post = BlogPost.query.order_by(BlogPost.id.desc()).first()
+        blogpost = BlogPost(id=last_post.id+1, title=form.title.data,user=current_user,
+                            description=form.dct.data, blogtype_id=form.type_id.data)
+        db.session.add(blogpost)
+        db.session.commit()
+        typeid = BlogType.query.filter_by(id=form.type_id.data).first()
+        flash(_('Finish'))
+        return redirect(url_for('Blog_Type_Page',blog_type=typeid.type))
+    return render_template('blog.html.j2', form=form)
+
+
+@app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def Edit_Blog_Post(post_id):
+    post = BlogPost.query.get(post_id)
+    if post.user_id != current_user.id:
+        flash('Unauthorized access.')
+        return redirect(url_for('Blog'))
+
+    form = EditBlogPostForm()
+
+    if form.validate_on_submit():
+        if form.delete.data:  # delete detect
+            BlogComt.query.filter_by(blogpost_id=post.id).delete() 
+            db.session.delete(post)
+            db.session.commit()
+            flash('Post deleted successfully.')
+            return redirect(url_for('Blog'))
+        
+        post.title = form.title.data
+        post.description = form.desc.data
+        db.session.commit()
+        flash('Post updated successfully.')
+        return redirect(url_for('Blog_Post_Page', post_id=post.id))
+    form.title.data = post.title
+    form.desc.data = post.description
+    return render_template('blog.html.j2', form=form, post=post)
+
+#-----------------------------------Jack Comt Form----------------------------------------------
+
+@app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
+@login_required
+def Add_Post_Comt(post_id):
+    postinf = BlogPost.query.get(post_id) # P1(1)
+    form = AddPostComtForm()
+
+    if form.validate_on_submit():
+        last_comt = BlogComt.query.order_by(BlogComt.id.desc()).first()
+        comt = BlogComt(id=last_comt.id+1 ,blogpost_id=post_id, 
+                        content=form.content.data,user=current_user)
+        
+        db.session.add(comt)
+        db.session.commit()
+        flash(_('Finish'))
+        return redirect(url_for('Blog_Post_Page',post_id=post_id))
+    return render_template('blog_post.html.j2', form=form,postinf=postinf)
+
+
+
+@app.route('/admin/editcomt', methods=['GET', 'POST'])
+@login_required
+def Del_Post_Comt_Admin():
+    if current_user.is_admin == False:
+        return redirect(url_for('index'))
+    form = DelComtForm()
+    if form.validate_on_submit():
+        if form.delete.data:
+            delcomt = BlogComt.query.get(form.comts.data)
+            db.session.delete(delcomt)
+            db.session.commit()
+            flash('Comt deleted successfully.')
+            return redirect(url_for('Admin'))
+    return render_template('blog.html.j2', form=form)
+
+#---------------------------Jack End-----------------------------------------
+
+#---------------------------Mak Chun Kit(gordy) Part-------------------------
+    
+@app.route('/travel')
+def travel():
+    countries = Country.query.all()
+    return render_template('travel.html.j2', countries=countries)
+
+@app.route('/city/<city_name>')
+def city(city_name):
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first_or_404()
+    # Find the intro in the database
+    intro = CityIntroduction.query.filter_by(city_name=city_name).first()
+    return render_template('city.html.j2', city=city, intro=intro)
+
+@app.route('/update_introduction/<city_name>', methods=['POST'])
+def update_introduction(city_name):
+    # Get the new introduction from the form data
+    new_introduction = request.form.get('introduction')
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # If the city is found
+    if city:
+        # Update the city's introduction
+        city.introduction.introduction = new_introduction
+
+        # Commit the changes to the database
+        db.session.commit()
+
+    # Redirect the user back to the city page
+    return redirect(url_for('city', city_name=city_name))
+
+@app.route('/edit_city/<city_name>')
+def edit_city(city_name):
+    # Get the section to edit from the query parameters
+    section = request.args.get('section', 'introduction')
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # Render the edit page
+    return render_template('edit_city.html.j2', city=city, intro=city.introduction, section=section)
+
+
+@app.route('/update_city/<city_name>', methods=['POST'])
+def update_city(city_name):
+    # Get the new data from the form
+    new_introduction = request.form.get('introduction')
+    new_useful_links = request.form.get('useful_links')
+    new_emergency_help = request.form.get('emergency_help')
+    new_transportation_info = request.form.get('transportation_info')
+
+
+    # Find the city in the database
+    city = City.query.filter_by(name=city_name).first()
+
+    # If the city is found
+    if city:
+        # Check if the introduction has changed
+        if new_introduction and new_introduction != city.introduction.introduction:
+            # Update the city's introduction
+            city.introduction.introduction = new_introduction
+
+        # Check if the useful_links has changed
+        if new_useful_links and new_useful_links != city.introduction.useful_links:
+            # Update the city's useful_links
+            city.introduction.useful_links = new_useful_links
+        
+        # Check if the emergency_help has changed
+        if new_emergency_help and new_emergency_help != city.introduction.emergency_help:
+            # Update the city's emergency_help
+            city.introduction.emergency_help = new_emergency_help
+
+        # Check if the transportation_info has changed
+        if new_transportation_info and new_transportation_info != city.introduction.transportation_info:
+            # Update the city's transportation_info
+            city.introduction.transportation_info = new_transportation_info
+
+        # Commit the changes to the database
+        db.session.commit()
+
+    # Redirect the user back to the city page
+    return redirect(url_for('city', city_name=city_name))
+#---------------------------Gordy End-----------------------------------------
+
+#------------------------Chen Cho Cham Tony part-----------------------------------------
+
 @app.route('/member',methods=['GET', 'POST'])
 @login_required
 def member():
@@ -240,3 +499,6 @@ def purchase_item():
     else:
         flash('You do not have enough points to purchase this item.', 'error')
     return redirect(url_for('member'))
+
+  
+ #------------------------end part-----------------------------------------

@@ -1,0 +1,38 @@
+{% extends "base.html.j2" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+{% if form %}
+    {{ wtf.quick_form(form) }}
+    <br/>
+{% endif %}
+
+
+<!--------------------------show type---------------------------------->
+
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<ul class="nav navbar-nav">
+    {% for i in blogtypes|sort(attribute='type') %}
+        <li>
+        <a href="{{ url_for('Blog_Type_Page', blog_type=i.type) }}">{{ i.type }}</a>
+        </li>
+    {% endfor %}
+</ul></div>
+
+
+<!------------------------show ramdon post-------------------------------->
+
+<div><ul>
+    {% for x in random_posts %}
+        <h1><a href="{{ url_for('Blog_Post_Page', post_id = x.id) }}">{{ x.title }}</a></h1>
+        <p>{{ x.user.username }}</p>
+        <p>{{ x.blogtype.type }}{{ x.blogtype_id }} </p>
+    {% endfor %}
+</ul></div>
+</br></br>
+
+
+<h2><a href="{{ url_for('Add_Blog_Post') }}">Add Post</a></h2>
+
+
+
+{% endblock %}

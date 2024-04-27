@@ -196,7 +196,7 @@ class PicTest(db.Model):
     name = db.Column(db.String(20))
     imglink = db.Column(db.String(1000))
 
-#---------------------------------------------------------------------------------
+#--------------------------Lau Mei Yan (Mandy) tables-------------------------------
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -228,3 +228,5 @@ class PostComment(db.Model):
 
     def __repr__(self) -> str:
         return f'<PostComment {self.body}>'
+    
+#---------------------------------------------------------------------------

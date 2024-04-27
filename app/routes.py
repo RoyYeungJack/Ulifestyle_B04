@@ -37,7 +37,7 @@ def index(): #Lau Mei Yan
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
    
-
+#---------------------Lau Mei Yan (Mandy)-------------------------
 
 @app.route('/posts')
 @login_required
@@ -53,6 +53,7 @@ def posts():
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
+#--------------------------Mandy End------------------------------
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -549,14 +550,14 @@ def purchase_item():
   
  #------------------------end part-----------------------------------------
 
-# Mandy
+#----------------------------Lau Mei Yan (Mandy)---------------------------
+
 @app.route('/post', methods=['GET', 'POST'])
 @app.route('/post/newpost', methods=['GET', 'POST'])
 @login_required
 def newpost():
     form = PostForm()
     if form.validate_on_submit():
-        #Lau Mei Yan
         city_id = form.city.data
         city = City.query.get(city_id)
         tag_name = form.tag.data
@@ -574,16 +575,8 @@ def newpost():
         db.session.commit()
         flash(_('Your post is now live!'))
         return redirect(url_for('posts'))
-    page = request.args.get('page', 1, type=int)
-    posts = current_user.followed_posts().paginate(
-        page=page, per_page=app.config["POSTS_PER_PAGE"], error_out=False)
-    next_url = url_for(
-        'index', page=posts.next_num) if posts.next_num else None
-    prev_url = url_for(
-        'index', page=posts.prev_num) if posts.prev_num else None
-    return render_template('newpost.html.j2', title=_('New Post'), form=form,
-                           posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
+
+    return render_template('newpost.html.j2', title=_('New Post'), form=form)
 
 @app.route('/post/<int:post_id>')
 def post_detail(post_id):
@@ -673,3 +666,5 @@ def posts_by_tag(tag_id):
 
     posts = Post.query.filter_by(tag=tag).all()
     return render_template('posts_by_tag.html.j2', tag=tag, posts=posts)
+
+#-----------------------------Mandy End-----------------------------------

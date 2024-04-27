@@ -91,7 +91,7 @@ db.session.add_all([tokyo_intro,kyoto_intro])
 
 db.session.commit()
 
-# NewPost
+# NewPost Mandy
 
 t1 = Tag(id=1, name="Travel")
 t2 = Tag(id=2, name="Gourmet")

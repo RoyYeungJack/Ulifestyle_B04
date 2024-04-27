@@ -455,7 +455,7 @@ def member():
     user_points = UserPoints.query.filter_by(user_id=current_user.id).first()
     food_items = MemberItem.query.filter_by(category='food').all()
     travel_items = MemberItem.query.filter_by(category='travel').all()
-    pictests = PicTest.query.all()
+    pictests = PicTest.query.filter_by(name = "cola").all()
     if user_points is not None:
         return render_template('member.html.j2', points=user_points.points, food_items=food_items, travel_items=travel_items, pictests=pictests)
     else:

@@ -249,7 +249,7 @@ def Add_Blog_Type_Admin():
         return redirect(url_for('Admin'))
     return render_template('blog.html.j2', form=form)
 
-@app.route('/admin/edit type', methods=['GET', 'POST'])
+@app.route('/admin/edittype', methods=['GET', 'POST'])
 @login_required
 def Edit_Blog_Type_Admin():
     if current_user.is_admin == False:
@@ -271,6 +271,7 @@ def Edit_Blog_Type_Admin():
             db.session.commit()
             flash('Type updated successfully.')
         return redirect(url_for('Blog'))
+    return render_template('blog.html.j2', form=form)
 
 #----------------------------------Jack Post Form----------------------------------------------
 

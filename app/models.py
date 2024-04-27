@@ -4,10 +4,10 @@ from hashlib import md5
 from app import app, db, login
 import jwt
 from sqlalchemy import Text
-
 from flask_login import UserMixin
 
 from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 followers = db.Table(
@@ -33,6 +33,8 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     blog_postss = db.relationship('BlogPost', backref='user')
     blog_comtss = db.relationship('BlogComt', backref='user')
+    post = db.relationship('Post', backref='user')
+    postcomment = db.relationship('PostComment', backref='user')
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -85,17 +87,6 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-  
-
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __repr__(self) -> str:
-        return f'<Post {self.body}>'
-
 #---------------------Yeung Yau Ki(Jack) Table--------------------------------------
 class BlogType(db.Model):
     __tablename__ = 'blogtype'
@@ -137,6 +128,7 @@ class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
     country_id = db.Column(db.Integer, db.ForeignKey('country.id'))
+    posts = db.relationship('Post', backref='city', lazy='dynamic')
 
     def __repr__(self):
         return f'<City {self.name}>'
@@ -205,3 +197,34 @@ class PicTest(db.Model):
     imglink = db.Column(db.String(1000))
 
 #---------------------------------------------------------------------------------
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    posts = db.relationship('Post', backref='tag', lazy='dynamic')
+
+    def __repr__(self) -> str:
+        return f'<Tag {self.body}>'
+
+class Post(db.Model): 
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    city_id = db.Column(db.Integer, db.ForeignKey('city.id'))
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))
+    postcomment = db.relationship('PostComment', backref='post')
+
+    def __repr__(self) -> str:
+        return f'<Post {self.body}>'
+
+class PostComment(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+    def __repr__(self) -> str:
+        return f'<PostComment {self.body}>'

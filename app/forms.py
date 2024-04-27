@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, \
-    TextAreaField
+from wtforms import HiddenField, IntegerField, StringField, PasswordField, BooleanField, SubmitField, \
+    TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
     Length, URL
 from flask_babel import _, lazy_gettext as _l
-from app.models import User
+from app.models import User, City
 from wtforms.validators import NumberRange
 
 
@@ -64,10 +64,26 @@ class EditProfileForm(FlaskForm):
             if user is not None:
                 raise ValidationError(_('Please use a different username.'))
 
+# Mandy
 
 class PostForm(FlaskForm):
-    post = TextAreaField(_l('Say something'), validators=[DataRequired()])
+    title = StringField(_l('Title'), validators=[DataRequired(), Length(max=255)])
+    post = TextAreaField(_l('Write something'), validators=[DataRequired()])
+    city = SelectField('City', coerce=int, validators=[DataRequired()])
+    city_id = HiddenField()
+    tag = StringField('Tag', validators=[Length(max=50)])
     submit = SubmitField(_l('Submit'))
+
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.city.choices = [(city.id, city.name) for city in City.query.all()]
+
+class AddCommentForm(FlaskForm):
+    content = TextAreaField('Comments', validators=[Length(max=100), DataRequired()])
+    submit = SubmitField(('Submit'))
+
+
+# Gordy
 
 class JapanPostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
@@ -76,3 +92,6 @@ class JapanPostForm(FlaskForm):
     rating = IntegerField('Rating', validators=[NumberRange(min=1, max=5)])
     image_url = StringField('Image URL', validators=[DataRequired(), URL()])
     submit = SubmitField('Post')
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.city.choices = [(city.id, city.name) for city in City.query.all()]

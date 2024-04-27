@@ -482,7 +482,7 @@ def guide_for_japan():
 @login_required
 def delete_post(post_id):
     if not current_user.is_admin:
-        abort(403)
+        abort(404)
     post = JapanPost.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()

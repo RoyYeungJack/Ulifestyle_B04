@@ -1,0 +1,64 @@
+{% extends "base.html.j2" %}
+{% block content %}
+<style>
+.post-detail {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.post-detail h1 {
+    color: #333;
+}
+
+.post-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.post-meta span {
+    display: block;
+    margin-bottom: 10px;
+    font-style: italic;
+    color: #666;
+}
+
+.post-content p {
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+}
+</style>
+<div class="post-detail">
+    <h1>{{ post.title }}</h1>
+    <img src="{{ post.image_url }}" alt="{{ post.title }}" class="post-image">
+    <div class="post-meta">
+        <span>Posted by: {{ post.author.username }}</span>
+        <span>Location: {{ post.location }}</span>
+        <span>Rating: {{ post.rating }} / 10</span>
+    </div>
+    <div class="post-content">
+        <p>{{ post.content }}</p>
+    </div>
+    <a href="{{ url_for('guide_for_japan') }}" class="btn btn-primary">Back to list</a>
+</div>
+{% endblock %}

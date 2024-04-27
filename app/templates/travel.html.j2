@@ -11,14 +11,17 @@
     <div class="country-container">
         {% for country in countries %}
             <div class="country">
-                <button onclick="showCities({{ country.id }})">{{ country.name }}</button>
+                <button class="button" onclick="showCities({{ country.id }})">{{ country.name }}</button>
                 <div id="cities-{{ country.id }}" class="cities" style="display: none;">
                     <h2>{{ country.name }}</h2>
                     {% for city in country.cities %}
-                        <a href="{{ url_for('city', city_name=city.name) }}">{{ city.name }}</a>{% if not loop.last %}  {% endif %}
+                        <a class="city-link" href="{{ url_for('city', city_name=city.name) }}">{{ city.name }}</a>{% if not loop.last %}  {% endif %}
                     {% endfor %}
                 </div>
             </div>
+            {% if loop.last %}
+                <a href="{{ url_for('guide_for_japan') }}" class="button">Guide for Japan</a>
+            {% endif %}
         {% endfor %}
     </div>
     <script>

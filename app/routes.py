@@ -40,7 +40,6 @@ def index(): #Lau Mei Yan
 #---------------------Lau Mei Yan (Mandy)-------------------------
 
 @app.route('/posts')
-@login_required
 def posts():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(

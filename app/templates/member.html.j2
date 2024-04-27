@@ -102,12 +102,13 @@
 
 
 <footer style="background-color: #333; color: white; padding: 20px; text-align: center;">
-<div style="display: flex; justify-content: space-around; align-items: center;"></div>
+<div style="display: flex; justify-content: space-around; align-items: center;">
 {% for pictest in pictests %}
 <a href="https://www.coca-cola.com/">
-<img src="{{ pictest.imglink }}" alt="cola">
+<img src="{{ pictest.imglink }}" width="1050" height="auto">
 </a>
 {% endfor %}
+</div>
 </div>
 <p style="margin-top: 20px;">&copy; Ulifestyle. All rights reserved.</p>
 </footer>

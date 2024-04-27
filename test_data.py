@@ -30,7 +30,7 @@ t1 = MemberItem(name='unbelievable japan travel', category='travel', points=6666
 db.session.add(f1)
 db.session.add(t1)
 
-cola = PicTest(name='cola', imglink='https://cdn.discordapp.com/attachments/979652282578767903/1231246056906297465/persuasive-ads-coca-cola-1.png?ex=662718ff&is=6625c77f&hm=de013a44b30a3370565ba46cebb12cd5463175acbe948cf4fa0d7f890933bfb7&')
+cola = PicTest(name='cola', imglink='https://www.adweek.com/wp-content/uploads/files/2016_Jan/coke-taste-the-feeling-11.jpg.webp')
 db.session.add(cola)
 
 

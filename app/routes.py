@@ -71,15 +71,6 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    # if user.last_login.date() < datetime.utcnow().date():
-    #     user_points = UserPoints.query.filter_by(user_id=user.id).first()
-    #     if user_points:
-    #         user_points.points += 100
-    #     else:
-    #         user_points = UserPoints(user_id=user.id, points=100)
-    #     db.session.add(user_points)
-    #     user.last_login = datetime.utcnow()
-    #     db.session.commit()
     return render_template('login.html.j2', title=_('Sign In'), form=form)
 
 
@@ -215,7 +206,7 @@ def member():
         return render_template('member.html.j2', points=new_user_points.points, food_items=food_items, travel_items=travel_items, pictests=pictests)
     
     
-@app.route('/add_points', methods=['POST'])
+@app.route('/add_points', methods=['GET', 'POST'])
 @login_required
 def add_points():
     user_id = request.form.get('user_id')
@@ -223,7 +214,7 @@ def add_points():
     UserPoints.add_points(user_id, points)
     return redirect(url_for('member'))
 
-@app.route('/subtract_points', methods=['POST'])
+@app.route('/subtract_points', methods=['GET', 'POST'])
 @login_required
 def subtract_points():
     user_id = request.form.get('user_id')
@@ -235,7 +226,7 @@ def subtract_points():
 def loginjump():
     return render_template('loginjump.html.j2')
 
-@app.route('/purchase_item', methods=['POST'])
+@app.route('/purchase_item', methods=['GET','POST'])
 @login_required
 def purchase_item():
     user_id = request.form.get('user_id')
@@ -249,6 +240,3 @@ def purchase_item():
     else:
         flash('You do not have enough points to purchase this item.', 'error')
     return redirect(url_for('member'))
-
-
-

@@ -57,6 +57,8 @@ c11 = BlogComt(id=11, content='shared',user_id=2, blogpost_id=5)
 c12 = BlogComt(id=12, content='Oh',user_id=3, blogpost_id=6)
 db.session.add_all([c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12])
 
+#------------------------------------------------------------------------------
+
 #Add the Column to the Country Table
 taiwan = Country(name='Taiwan')
 japan = Country(name='Japan')

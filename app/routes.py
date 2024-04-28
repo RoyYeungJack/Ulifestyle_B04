@@ -589,6 +589,7 @@ def post_detail(post_id):
     return render_template('post_detail.html.j2', post=post, comments=comments)
 
 @app.route('/post/<int:post_id>/comment', methods=['GET', 'POST'])
+@login_required
 def add_comment(post_id):
     post = Post.query.get(post_id)
 

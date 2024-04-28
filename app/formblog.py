@@ -55,7 +55,6 @@ class DelComtForm(FlaskForm):
     comts = SelectField('Comments', choices=[], validators=[DataRequired()])
     delete = SubmitField('Delete')
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.comts.choices = [(blogcomt.id, blogcomt.content) for blogcomt in BlogComt.query.all()]

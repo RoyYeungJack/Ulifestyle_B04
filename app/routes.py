@@ -195,7 +195,7 @@ def unfollow(username):
     return redirect(url_for('user', username=username))
 
 
-#----------------------------Admin Page-------------------------------------
+#-----------------------Jack Admin Page-------------------------------------
 
 @app.route('/admin')
 @login_required
@@ -204,8 +204,7 @@ def Admin():
         return redirect(url_for('index'))
     return render_template('admin.html.j2')
 
-
-#---------------------Yeung Yau Ki(Jack) Base Page--------------------------------------
+#---------------------Yeung Yau Ki(Jack) Base Page--------------------------
 
 @app.route('/blog', methods=['GET', 'POST'])
 def Blog():
@@ -213,18 +212,18 @@ def Blog():
     blogtypes = BlogType.query.all()
     blogcomts = BlogComt.query.all()
     random.shuffle(blogposts)
-    random_posts = blogposts[:5]
+    random_posts = blogposts[:5]        # gen random post on blogindex
     return render_template('blog.html.j2',blogposts=blogposts,blogtypes=blogtypes, blogcomts=blogcomts,random_posts=random_posts)
 
 
-@app.route('/blog/<blog_type>')
+@app.route('/blog/<blog_type>')         # specific type page
 def Blog_Type_Page(blog_type):
     blogtypes = BlogType.query.all()
-    blog_type_entry = BlogType.query.filter_by(type=blog_type).first() #BlogType.type(Pet) Object
-    blog_posts = BlogPost.query.filter_by(blogtype_id=blog_type_entry.id).all() #BP.btid=Pet.id(P1,P2) Object
+    blog_type_entry = BlogType.query.filter_by(type=blog_type).first()          #BlogType.type(Pet) Object
+    blog_posts = BlogPost.query.filter_by(blogtype_id=blog_type_entry.id).all() #BlogPost.byte_id=Pet.id(P1,P2) Object
     return render_template('blog_type.html.j2', blogtypes=blogtypes, blog_type_entry=blog_type_entry, blog_posts=blog_posts)
 
-@app.route('/blog/post/<int:post_id>')
+@app.route('/blog/post/<int:post_id>')  # # specific post page
 def Blog_Post_Page(post_id):
     blogtypes = BlogType.query.all()
     postinf = BlogPost.query.get(post_id)
@@ -235,12 +234,13 @@ def Blog_Post_Page(post_id):
 
 @app.route('/admin/addtype', methods=['GET', 'POST'])
 @login_required
-def Add_Blog_Type_Admin():
+def Add_Blog_Type_Admin():              
     if current_user.is_admin == False:
         return redirect(url_for('index'))
     form = AddBlogTypeForm()
+
     if form.validate_on_submit():
-        last_type = BlogType.query.order_by(BlogType.id.desc()).first()
+        last_type = BlogType.query.order_by(BlogType.id.desc()).first()   # find lastest ID
         blogtype = BlogType(id=last_type.id +1 , type=form.addtype.data)
         db.session.add(blogtype)
         db.session.commit()
@@ -248,23 +248,25 @@ def Add_Blog_Type_Admin():
         return redirect(url_for('Admin'))
     return render_template('blog.html.j2', form=form)
 
+
 @app.route('/admin/edittype', methods=['GET', 'POST'])
 @login_required
 def Edit_Blog_Type_Admin():
     if current_user.is_admin == False:
         return redirect(url_for('index'))
     form = EditBlogTypeForm()
+
     if form.validate_on_submit():
-        types = BlogType.query.get(form.type_id.data)
-        if form.delete.data:
+        types = BlogType.query.get(form.type_id.data)   
+        if form.delete.data:                                        # Del Type and sub Posts & Comts
             subposts = BlogPost.query.filter_by(blogtype_id=types.id).all()
             for i in subposts:
-                BlogComt.query.filter_by(blogpost_id=i.id).delete()
-
-            BlogPost.query.filter_by(blogtype_id=types.id).delete()
+                BlogComt.query.filter_by(blogpost_id=i.id).delete() # sub Comts
+            BlogPost.query.filter_by(blogtype_id=types.id).delete() # sub Posts
             db.session.delete(types)
             db.session.commit()
             flash('Type deleted successfully.')
+
         else:
             types.type = form.updtype.data
             db.session.commit()
@@ -278,42 +280,43 @@ def Edit_Blog_Type_Admin():
 @login_required
 def Add_Blog_Post():
     form = AddBlogPostForm()
+
     if form.validate_on_submit():
-        last_post = BlogPost.query.order_by(BlogPost.id.desc()).first()
+        last_post = BlogPost.query.order_by(BlogPost.id.desc()).first()  # find lastest ID
         blogpost = BlogPost(id=last_post.id+1, title=form.title.data,user=current_user,
                             description=form.dct.data, blogtype_id=form.type_id.data)
         db.session.add(blogpost)
         db.session.commit()
-        typeid = BlogType.query.filter_by(id=form.type_id.data).first()
+        typeid = BlogType.query.filter_by(id=form.type_id.data).first()  # fkey
         flash(_('Finish'))
         return redirect(url_for('Blog_Type_Page',blog_type=typeid.type))
     return render_template('blog.html.j2', form=form)
 
 
 @app.route('/blog/editpost/<int:post_id>', methods=['GET', 'POST'])
-@login_required
+@login_required                            # specfic post id page
 def Edit_Blog_Post(post_id):
     post = BlogPost.query.get(post_id)
-    if post.user_id != current_user.id:
+    if post.user_id != current_user.id:    # restrict same user
         flash('Unauthorized access.')
         return redirect(url_for('Blog'))
-
     form = EditBlogPostForm()
 
     if form.validate_on_submit():
-        if form.delete.data:  # delete detect
+        if form.delete.data:       # delete detect , sub comt
             BlogComt.query.filter_by(blogpost_id=post.id).delete() 
             db.session.delete(post)
             db.session.commit()
             flash('Post deleted successfully.')
             return redirect(url_for('Blog'))
         
-        post.title = form.title.data
+        post.title = form.title.data      # update to db
         post.description = form.desc.data
         db.session.commit()
         flash('Post updated successfully.')
         return redirect(url_for('Blog_Post_Page', post_id=post.id))
-    form.title.data = post.title
+    
+    form.title.data = post.title           # show original data
     form.desc.data = post.description
     return render_template('blog.html.j2', form=form, post=post)
 
@@ -322,20 +325,18 @@ def Edit_Blog_Post(post_id):
 @app.route('/blog/post/<int:post_id>/comt', methods=['GET', 'POST'])
 @login_required
 def Add_Post_Comt(post_id):
-    postinf = BlogPost.query.get(post_id) # P1(1)
+    postinf = BlogPost.query.get(post_id)
     form = AddPostComtForm()
 
     if form.validate_on_submit():
         last_comt = BlogComt.query.order_by(BlogComt.id.desc()).first()
         comt = BlogComt(id=last_comt.id+1 ,blogpost_id=post_id, 
                         content=form.content.data,user=current_user)
-        
         db.session.add(comt)
         db.session.commit()
         flash(_('Finish'))
         return redirect(url_for('Blog_Post_Page',post_id=post_id))
     return render_template('blog_post.html.j2', form=form,postinf=postinf)
-
 
 
 @app.route('/admin/editcomt', methods=['GET', 'POST'])
@@ -344,6 +345,7 @@ def Del_Post_Comt_Admin():
     if current_user.is_admin == False:
         return redirect(url_for('index'))
     form = DelComtForm()
+
     if form.validate_on_submit():
         if form.delete.data:
             delcomt = BlogComt.query.get(form.comts.data)

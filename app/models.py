@@ -33,8 +33,6 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     blog_postss = db.relationship('BlogPost', backref='user')
     blog_comtss = db.relationship('BlogComt', backref='user')
-    post = db.relationship('Post', backref='user')
-    postcomment = db.relationship('PostComment', backref='user')
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'

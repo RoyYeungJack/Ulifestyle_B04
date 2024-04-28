@@ -92,6 +92,3 @@ class JapanPostForm(FlaskForm):
     rating = IntegerField('Rating', validators=[NumberRange(min=1, max=5)])
     image_url = StringField('Image URL', validators=[DataRequired(), URL()])
     submit = SubmitField('Post')
-    def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
-        self.city.choices = [(city.id, city.name) for city in City.query.all()]

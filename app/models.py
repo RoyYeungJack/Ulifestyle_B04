@@ -5,6 +5,7 @@ from app import app, db, login
 import jwt
 from sqlalchemy import Text
 from flask_login import UserMixin
+from sqlalchemy import CheckConstraint, and_
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -33,8 +34,6 @@ class User(UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     blog_postss = db.relationship('BlogPost', backref='user')
     blog_comtss = db.relationship('BlogComt', backref='user')
-    post = db.relationship('Post', backref='user')
-    postcomment = db.relationship('PostComment', backref='user')
 
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -160,6 +159,7 @@ class JapanPost(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    __table_args__ = (CheckConstraint(and_(rating >= 1, rating <= 5), name='check_rating_range'),)
 
     author = db.relationship('User', backref='japan_posts')
 #---------------------------------------------------------------------------------

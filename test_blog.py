@@ -1,5 +1,6 @@
 from app import db, app
-from app.models import Post, PostComment, Tag, User, BlogType, BlogPost, BlogComt, Country, City, CityIntroduction,PicTest, MemberItem , ItemImage
+from app.models import Post, PostComment, Tag, User, BlogType, BlogPost, \
+BlogComt, Country, City, CityIntroduction,PicTest, MemberItem , ItemImage
 
 app_context = app.app_context()
 app_context.push()

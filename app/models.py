@@ -5,6 +5,7 @@ from app import app, db, login
 import jwt
 from sqlalchemy import Text
 from flask_login import UserMixin
+from sqlalchemy import CheckConstraint, and_
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -158,6 +159,7 @@ class JapanPost(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    __table_args__ = (CheckConstraint(and_(rating >= 1, rating <= 5), name='check_rating_range'),)
 
     author = db.relationship('User', backref='japan_posts')
 #---------------------------------------------------------------------------------

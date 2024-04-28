@@ -41,64 +41,57 @@
 </div>
 
 
-
-<div class="category-container" style="margin-bottom: 2rem;">
-<h2 style="font-size: 24px; color: #333;">Food</h2>
 {% for item in food_items %}
 <div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-<h4 style="color: #333;">{{ item.name }}</h4>
-<p style="color: #666;">{{ item.points }} points</p>
-<form action="{{ url_for('purchase_item') }}" method="post">
-<input type="hidden" name="user_id" value="{{ current_user.id }}">
-<input type="hidden" name="item_id" value="{{ item.id }}">
-<button type="submit" style="background-color: #4CAF50; /* Green */
-               border: none;
-               color: white;
-               padding: 15px 32px;
-               text-align: center;
-               text-decoration: none;
-               display: inline-block;
-               font-size: 16px;
-               margin: 4px 2px;
-               cursor: pointer;
-               border-radius: 4px;
-               transition-duration: 0.4s;"
-        onmouseover="this.style.backgroundColor='#45a049'"
-        onmouseout="this.style.backgroundColor='#4CAF50'">Purchase</button>
-</form>
-{% endfor %}
+    <h4 style="color: #333;">{{ item.MemberItem.name }}</h4>
+    <img src="{{ item.ItemImage.imglink }}" alt="Item Image" width='150' height='75'>
+    <p style="color: #666;">{{ item.MemberItem.points }} points</p>
+    <form action="{{ url_for('purchase_item') }}" method="post">
+        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+        <input type="hidden" name="item_id" value="{{ item.MemberItem.id }}">
+        <button type="submit" style="background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition-duration: 0.4s;"
+            onmouseover="this.style.backgroundColor='#45a049'"
+            onmouseout="this.style.backgroundColor='#4CAF50'">Purchase</button>
+    </form>
 </div>
+{% endfor %}
 
-
-
-<div class="category-container" style="margin-bottom: 2rem;">
-<h2 style="font-size: 24px; color: #333;">Travel</h2>
 {% for item in travel_items %}
 <div style="border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem; background-color: #f9f9f9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-<h4 style="color: #333;">{{ item.name }}</h4>
-<p style="color: #666;">{{ item.points }} points</p>
-<form action="{{ url_for('purchase_item') }}" method="post">
-<input type="hidden" name="user_id" value="{{ current_user.id }}">
-<input type="hidden" name="item_id" value="{{ item.id }}">
-<button type="submit" style="background-color: #4CAF50; /* Green */
-               border: none;
-               color: white;
-               padding: 15px 32px;
-               text-align: center;
-               text-decoration: none;
-               display: inline-block;
-               font-size: 16px;
-               margin: 4px 2px;
-               cursor: pointer;
-               border-radius: 4px;
-               transition-duration: 0.4s;"
-        onmouseover="this.style.backgroundColor='#45a049'"
-        onmouseout="this.style.backgroundColor='#4CAF50'">Purchase</button>
-</form>
+    <h4 style="color: #333;">{{ item.MemberItem.name }}</h4>
+    <img src="{{ item.ItemImage.imglink }}" alt="Item Image" width='150' height='75'>
+    <p style="color: #666;">{{ item.MemberItem.points }} points</p>
+    <form action="{{ url_for('purchase_item') }}" method="post">
+        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+        <input type="hidden" name="item_id" value="{{ item.MemberItem.id }}">
+        <button type="submit" style="background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition-duration: 0.4s;"
+            onmouseover="this.style.backgroundColor='#45a049'"
+            onmouseout="this.style.backgroundColor='#4CAF50'">Purchase</button>
+    </form>
+</div>
 {% endfor %}
-</div>
-</div>
-
 
 
 <footer style="background-color: #333; color: white; padding: 20px; text-align: center;">

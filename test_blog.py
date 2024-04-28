@@ -1,5 +1,5 @@
 from app import db, app
-from app.models import Post, PostComment, Tag, User, BlogType, BlogPost, BlogComt, Country, City, CityIntroduction
+from app.models import Post, PostComment, Tag, User, BlogType, BlogPost, BlogComt, Country, City, CityIntroduction,PicTest, MemberItem , ItemImage
 
 app_context = app.app_context()
 app_context.push()
@@ -107,5 +107,22 @@ pc1 = PostComment(id=1, content='test',user_id=2 ,post_id=1)
 pc2 = PostComment(id=2, content='test2',user_id=3 ,post_id=2)
 db.session.add(pc1)
 db.session.add(pc2)
+
+#tables for member page items
+f1 = MemberItem(name='unbelievable curry fish ball', category='food', points=6969)
+t1 = MemberItem(name='unbelievable japan travel', category='travel', points=6666)
+db.session.add(f1)
+db.session.add(t1)
+db.session.commit()
+
+#link for ads pic
+cola = PicTest(name='cola', imglink='https://www.adweek.com/wp-content/uploads/files/2016_Jan/coke-taste-the-feeling-11.jpg.webp')
+db.session.add(cola)
+
+#link for item image
+ufb = ItemImage(item_id=f1.id, imglink='https://thewoksoflife.com/wp-content/uploads/2017/02/curry-fish-balls-13.jpg')
+ujt = ItemImage(item_id=t1.id, imglink='https://theasiacollective.com/wp-content/uploads/2018/06/Feature-Photo-1-e1530688449976.png')
+db.session.add(ufb)
+db.session.add(ujt)
 
 db.session.commit()

@@ -8,7 +8,7 @@ from app import app, db
 from app.forms import AddCommentForm, JapanPostForm, LoginForm, RegistrationForm, EditProfileForm, PostForm, \
     ResetPasswordRequestForm, ResetPasswordForm, PostForm
 from app.models import User, Post, Country, City, CityIntroduction, BlogPost, BlogType, BlogComt, JapanPost, \
-UserPoints , MemberItem , PicTest, PostComment, Tag
+UserPoints , MemberItem , PicTest, PostComment, Tag, ItemImage
 from app.formblog import AddBlogPostForm, AddBlogTypeForm, EditBlogPostForm, \
     EditBlogTypeForm, AddPostComtForm,DelComtForm
 from app.email import send_password_reset_email
@@ -499,8 +499,8 @@ def view_japan_post(post_id):
 @login_required
 def member():
     user_points = UserPoints.query.filter_by(user_id=current_user.id).first()
-    food_items = MemberItem.query.filter_by(category='food').all()
-    travel_items = MemberItem.query.filter_by(category='travel').all()
+    food_items = db.session.query(MemberItem, ItemImage).filter_by(category='food').join(ItemImage).all()
+    travel_items = db.session.query(MemberItem, ItemImage).filter_by(category='travel').join(ItemImage).all()
     pictests = PicTest.query.filter_by(name = "cola").all()
     if user_points is not None:
         return render_template('member.html.j2', points=user_points.points, food_items=food_items, travel_items=travel_items, pictests=pictests)

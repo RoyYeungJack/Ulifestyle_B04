@@ -191,6 +191,15 @@ class MemberItem(db.Model):
     category = db.Column(db.String(64))  # 'food' or 'travel'
     points = db.Column(db.Integer)
 
+    item_image = db.relationship('ItemImage', uselist=False, back_populates='member_item')
+
+class ItemImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('member_item.id'), nullable=False)
+    imglink = db.Column(db.String(1000))
+
+    member_item = db.relationship('MemberItem', back_populates='item_image')
+
 class PicTest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
